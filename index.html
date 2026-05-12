@@ -1,396 +1,300 @@
 <!DOCTYPE html>
-<html lang="es"><head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Swala Capital — Conectamos capital con oportunidades.</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-
-
-
-
-
-<link rel="stylesheet" href="styles.css">
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swala Capital — Capital para confeccionistas colombianos</title>
+    <meta name="description" content="Conectamos confeccionistas colombianos con capital para ejecutar sus pedidos. Sin hipotecar activos. Sin historial crediticio. Respuesta en 48 horas.">
+    
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<!-- NAV -->
-<nav id="nav">
-  <a class="nl" href="#inicio">Swala <em>Capital</em></a>
-  <a class="nc" href="#form-pro">Quiero aplicar</a>
-</nav>
-
-<!-- HERO -->
-<section class="hero" id="inicio">
-  <div class="hg hg1"></div>
-  <div class="hg hg2"></div>
-  <canvas id="thread-canvas"></canvas>
-
-  <!-- Floating textile SVGs -->
-  <div class="textile-floats" id="textile-floats"></div>
-
-  <div class="hi">
-    <div class="htag">Conectamos capital con oportunidades</div>
-    <h1>El dinero no debería ser<br><strong>lo que te frena.</strong><span>Conectamos capital con oportunidades.</span></h1>
-    <p class="hsub">Somos una fintech especializada en el sector textil confección. Financiamos tu producción con base en tus contratos — no en tus garantías ni en tu historial crediticio.</p>
-    <div class="hcta">
-      <a href="#swala-pro" class="hbp">Conoce cómo funciona →</a>
-      <div class="hero-badge">Sector textil confección · <span>Colombia</span></div>
-    </div>
-  </div>
-  <div class="hscroll">
-    <div class="scroll-line"></div>
-    <span>Desliza para conocer más</span>
-  </div>
-</section>
-
-<!-- TICKER -->
-<div class="ticker">
-  <div class="ticker-inner" id="ticker-inner">
-    <span class="tick-item"><span class="tick-dot"></span>Financiamiento textil <em>sin garantías</em></span>
-    <span class="tick-item"><span class="tick-dot"></span>Tu contrato es tu aval <em>real</em></span>
-    <span class="tick-item"><span class="tick-dot"></span>Tasa mensual <em>2%</em></span>
-    <span class="tick-item"><span class="tick-dot"></span>Respuesta en <em>48 horas</em></span>
-    <span class="tick-item"><span class="tick-dot"></span>Overoles · Uniformes · Dotación</span>
-    <span class="tick-item"><span class="tick-dot"></span>Desembolso <em>100% al proveedor</em></span>
-    <span class="tick-item"><span class="tick-dot"></span>Confecciones · Insumos · Materias primas</span>
-    <span class="tick-item"><span class="tick-dot"></span>Plazo hasta <em>180 días</em></span>
-    <span class="tick-item"><span class="tick-dot"></span>Capital para crecer <em>sin bancos</em></span>
-    <!-- duplicate for seamless loop -->
-    <span class="tick-item"><span class="tick-dot"></span>Financiamiento textil <em>sin garantías</em></span>
-    <span class="tick-item"><span class="tick-dot"></span>Tu contrato es tu aval <em>real</em></span>
-    <span class="tick-item"><span class="tick-dot"></span>Tasa mensual <em>2%</em></span>
-    <span class="tick-item"><span class="tick-dot"></span>Respuesta en <em>48 horas</em></span>
-    <span class="tick-item"><span class="tick-dot"></span>Overoles · Uniformes · Dotación</span>
-    <span class="tick-item"><span class="tick-dot"></span>Desembolso <em>100% al proveedor</em></span>
-    <span class="tick-item"><span class="tick-dot"></span>Confecciones · Insumos · Materias primas</span>
-    <span class="tick-item"><span class="tick-dot"></span>Plazo hasta <em>180 días</em></span>
-    <span class="tick-item"><span class="tick-dot"></span>Capital para crecer <em>sin bancos</em></span>
-  </div>
-</div>
-
-<!-- STATS BAR -->
-<div class="stats-bar">
-  <div class="stat"><div class="stat-n" data-count="2" data-suffix="%">0%</div><div class="stat-l">Tasa mensual</div></div>
-  <div class="stat"><div class="stat-n" data-count="48" data-suffix="h">0h</div><div class="stat-l">Respuesta de aprobación</div></div>
-  <div class="stat"><div class="stat-n" data-count="180" data-suffix="">0</div><div class="stat-l">Días de plazo máximo</div></div>
-  <div class="stat"><div class="stat-n" data-count="100" data-suffix="%">0%</div><div class="stat-l">Directo al proveedor</div></div>
-</div>
-
-<!-- TEXTILE SCENE -->
-<section class="textile-scene" id="sector">
-  <div style="max-width:1200px;margin:0 auto 48px">
-    <div class="sec-tag rv" style="color:var(--p-od)">
-      <span style="width:20px;height:1px;background:var(--p-od);display:inline-block"></span>
-      El sector que financiamos
-    </div>
-    <h2 style="font-family:'Fraunces',serif;font-size:clamp(28px,3.5vw,48px);font-weight:300;color:#fff;line-height:1.1;margin-bottom:12px" class="rv d1">
-      Producción textil colombiana,<br><em style="font-style:italic;color:var(--p-od)">financiada a tiempo.</em>
-    </h2>
-    <p style="font-size:16px;color:rgba(255,255,255,.5);line-height:1.7;max-width:520px" class="rv d2">Desde overoles industriales hasta dotaciones institucionales. Conocemos tu ciclo productivo y financiamos cada etapa.</p>
-  </div>
-  <div class="ts-grid rv d2">
-
-    <!-- Card 1: Hilos y tejido -->
-    <div class="ts-card">
-      <div class="ts-card-bg" style="background:#1a0f2e">
-        <canvas class="fabric-anim" id="fabric1"></canvas>
-      </div>
-      <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(109,40,217,.2),transparent);z-index:1"></div>
-      <div class="ts-card-label">
-        <h4>Hilos &amp; Tejidos</h4>
-        <p>Telas · Insumos · Materias primas</p>
-      </div>
-    </div>
-
-    <!-- Card 2: Confección -->
-    <div class="ts-card">
-      <div class="ts-card-bg" style="background:#120a22">
-        <canvas class="fabric-anim" id="fabric2"></canvas>
-      </div>
-      <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(76,29,149,.25),transparent);z-index:1"></div>
-      <div class="ts-card-label">
-        <h4>Confección Industrial</h4>
-        <p>Overoles · Uniformes · Dotación</p>
-      </div>
-    </div>
-
-    <!-- Card 3: Entrega & Cobro -->
-    <div class="ts-card">
-      <div class="ts-card-bg" style="background:#0f1420">
-        <canvas class="fabric-anim" id="fabric3"></canvas>
-      </div>
-      <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(52,211,153,.1),transparent);z-index:1"></div>
-      <div class="ts-card-label">
-        <h4>Entrega &amp; Cobro</h4>
-        <p>Contratos · Facturas · Cartera</p>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Process flow -->
-  <div style="max-width:900px;margin:60px auto 0;display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:nowrap" class="rv d3" id="flow-row">
-
-    <!-- 1: Contrato -->
-    <div style="text-align:center;flex:1;min-width:0;padding:0 8px">
-      <div style="width:52px;height:52px;border-radius:14px;background:rgba(196,181,253,.08);border:1px solid rgba(196,181,253,.18);display:flex;align-items:center;justify-content:center;margin:0 auto 10px">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(196,181,253,.8)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>
-      </div>
-      <div style="font-size:11px;color:rgba(255,255,255,.4);letter-spacing:.08em;text-transform:uppercase;line-height:1.4">Tienes<br>contrato</div>
-    </div>
-
-    <div style="flex:0 0 32px;height:1px;background:linear-gradient(to right,rgba(196,181,253,.25),rgba(196,181,253,.08))"></div>
-
-    <!-- 2: Análisis -->
-    <div style="text-align:center;flex:1;min-width:0;padding:0 8px">
-      <div style="width:52px;height:52px;border-radius:14px;background:rgba(196,181,253,.08);border:1px solid rgba(196,181,253,.18);display:flex;align-items:center;justify-content:center;margin:0 auto 10px">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(196,181,253,.8)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-      </div>
-      <div style="font-size:11px;color:rgba(255,255,255,.4);letter-spacing:.08em;text-transform:uppercase;line-height:1.4">Swala<br>analiza</div>
-    </div>
-
-    <div style="flex:0 0 32px;height:1px;background:linear-gradient(to right,rgba(196,181,253,.25),rgba(196,181,253,.08))"></div>
-
-    <!-- 3: Desembolso -->
-    <div style="text-align:center;flex:1;min-width:0;padding:0 8px">
-      <div style="width:52px;height:52px;border-radius:14px;background:rgba(196,181,253,.08);border:1px solid rgba(196,181,253,.18);display:flex;align-items:center;justify-content:center;margin:0 auto 10px">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(196,181,253,.8)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line><line x1="6" y1="15" x2="10" y2="15"></line><line x1="14" y1="15" x2="16" y2="15"></line></svg>
-      </div>
-      <div style="font-size:11px;color:rgba(255,255,255,.4);letter-spacing:.08em;text-transform:uppercase;line-height:1.4">Pago al<br>proveedor</div>
-    </div>
-
-    <div style="flex:0 0 32px;height:1px;background:linear-gradient(to right,rgba(196,181,253,.25),rgba(196,181,253,.08))"></div>
-
-    <!-- 4: Producción -->
-    <div style="text-align:center;flex:1;min-width:0;padding:0 8px">
-      <div style="width:52px;height:52px;border-radius:14px;background:rgba(196,181,253,.08);border:1px solid rgba(196,181,253,.18);display:flex;align-items:center;justify-content:center;margin:0 auto 10px">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(196,181,253,.8)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-      </div>
-      <div style="font-size:11px;color:rgba(255,255,255,.4);letter-spacing:.08em;text-transform:uppercase;line-height:1.4">Produces<br>&amp; entregas</div>
-    </div>
-
-    <div style="flex:0 0 32px;height:1px;background:linear-gradient(to right,rgba(196,181,253,.25),rgba(52,211,153,.2))"></div>
-
-    <!-- 5: Cobro -->
-    <div style="text-align:center;flex:1;min-width:0;padding:0 8px">
-      <div style="width:52px;height:52px;border-radius:14px;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.25);display:flex;align-items:center;justify-content:center;margin:0 auto 10px">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(52,211,153,.9)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-      </div>
-      <div style="font-size:11px;color:rgba(52,211,153,.7);letter-spacing:.08em;text-transform:uppercase;line-height:1.4">Cobras<br>neto</div>
-    </div>
-
-  </div>
-</section>
-
-<!-- SWALA PRO -->
-<section class="sec pro-sec" id="swala-pro">
-  <div class="pro-wrap">
-    <div>
-      <div class="pro-badge rv"><span>⚡ Swala Pro</span></div>
-      <h2 class="pro-title rv d1">Tu contrato es tu garantía.<br>Nosotros ponemos el capital.</h2>
-      <p class="pro-desc rv d2">Tienes un contrato con un pagador sólido pero no tienes el capital para ejecutarlo. Swala conecta ese contrato con un fondeador, el dinero va directo a tu proveedor de materias primas y tú produces, entregas y cobras.</p>
-
-      <div class="rates rv d2">
-        <div class="rate-card highlight">
-          <div class="rate-n">2%</div>
-          <div class="rate-l">Tasa mensual</div>
-          <div class="rate-sub">Sobre saldo vivo</div>
+    <!-- NAV -->
+    <nav class="bg-petroleo">
+        <div class="container nav-wrapper">
+            <a href="#" class="logo font-serif">Swala<span>Capital</span></a>
+            <a href="#formulario" class="btn btn-nav">Quiero hablar con Swala</a>
         </div>
-        <div class="rate-card">
-          <div class="rate-n">1%</div>
-          <div class="rate-l">Fee estructuración</div>
-          <div class="rate-sub">Una sola vez</div>
+    </nav>
+
+    <!-- SECTION 1: HERO -->
+    <header class="hero bg-petroleo">
+        <div class="container">
+            <div class="hero-content rv">
+                <span class="badge-tag text-lima">Habilitadores de Sueños Industriales</span>
+                <h1>¿El dinero te <span class="text-lima">frena</span> aunque tengas pedidos?</h1>
+                <p class="hero-sub">Conectamos confeccionistas colombianos con el capital que necesitan para ejecutar sus pedidos. Sin hipotecar activos personales. Sin historial crediticio.</p>
+                
+                <div class="hero-actions">
+                    <a href="#formulario" class="btn btn-primary">Quiero hablar con Swala</a>
+                    <div class="hero-badges">
+                        <span>Sector confección colombiano</span>
+                        <span class="dot">•</span>
+                        <span>Respuesta en 48 horas</span>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="rate-card">
-          <div class="rate-n">30–180</div>
-          <div class="rate-l">Días de plazo</div>
-          <div class="rate-sub">Según tu ciclo</div>
+    </header>
+
+    <!-- SECTION 2: SITUACIONES -->
+    <section class="sec bg-hueso" id="situaciones">
+        <div class="container">
+            <div class="sec-header rv">
+                <h2>¿Te identificas con alguna de estas <span class="text-lima-dark">situaciones?</span></h2>
+                <p class="sec-sub">Si tu respuesta es sí, podemos ayudarte.</p>
+            </div>
+
+            <div class="situations-grid">
+                <!-- Card 1 -->
+                <div class="situation-card rv">
+                    <div class="card-icon">📋</div>
+                    <h3>Tengo el contrato pero no el capital</h3>
+                    <p>Tienes un pedido grande con un cliente sólido. La orden llegó. El plazo también. Pero no tienes el dinero para comprar la materia prima y arrancar.</p>
+                    <a href="#formulario" class="card-cta">Esta es mi situación →</a>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="situation-card rv">
+                    <div class="card-icon">📦</div>
+                    <h3>Tengo la orden de compra pero necesito arrancar</h3>
+                    <p>Tu cliente aprobó el pedido. Tienes la orden firmada. Pero sin capital para las materias primas, el pedido se queda en papel.</p>
+                    <a href="#formulario" class="card-cta">Esta es mi situación →</a>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="situation-card rv">
+                    <div class="card-icon">⏳</div>
+                    <h3>Ya entregué y facturé, pero espero meses para cobrar</h3>
+                    <p>Cumpliste con tu cliente. Entregaste, facturaste. Pero tu dinero está atrapado en esa factura y necesitas liquidez hoy para seguir operando.</p>
+                    <a href="#formulario" class="card-cta">Esta es mi situación →</a>
+                </div>
+            </div>
         </div>
-        <div class="rate-card">
-          <div class="rate-n">100%</div>
-          <div class="rate-l">Al proveedor</div>
-          <div class="rate-sub">Destinación específica</div>
+    </section>
+
+    <!-- SECTION 3: CÓMO FUNCIONA -->
+    <section class="sec bg-petroleo" id="como-funciona">
+        <div class="container">
+            <div class="sec-header rv">
+                <h2>Así de <span class="text-lima">simple</span></h2>
+            </div>
+
+            <div class="steps-grid">
+                <!-- Paso 1 -->
+                <div class="step-item rv">
+                    <div class="step-num text-lima">01</div>
+                    <div class="step-content">
+                        <h3>Nos cuentas tu operación</h3>
+                        <p>Llenas el formulario con lo básico. Sin documentos, sin trámites todavía.</p>
+                    </div>
+                </div>
+
+                <!-- Paso 2 -->
+                <div class="step-item rv">
+                    <div class="step-num text-lima">02</div>
+                    <div class="step-content">
+                        <h3>Evaluamos en menos de 48 horas</h3>
+                        <p>Revisamos tu caso y te decimos si podemos ayudarte.</p>
+                    </div>
+                </div>
+
+                <!-- Paso 3 -->
+                <div class="step-item rv">
+                    <div class="step-num text-lima">03</div>
+                    <div class="step-content">
+                        <h3>Si califica, arrancamos</h3>
+                        <p>Estructuramos la operación y conseguimos el capital para que produzcas.</p>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
+    </section>
 
-      <p style="font-size:11px;color:var(--g3);margin-bottom:24px;display:flex;align-items:center;gap:6px;margin-top:-16px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>Las tasas son indicativas y están sujetas a cambios según el perfil de la operación.</p>
-      <div class="steps rv d3">
-        <div class="step"><div class="step-n">1</div><div class="step-body"><strong>Nos cuentas tu operación <span class="step-tag">Día 1</span></strong><span>Contrato, monto, pagador final. Sin papeleos, sin formularios interminables.</span></div></div>
-        <div class="step"><div class="step-n">2</div><div class="step-body"><strong>Evaluamos al pagador <span class="step-tag">Día 1–2</span></strong><span>Evaluamos la viabilidad de tu operación y la solidez de tu cliente. Si tú tienes el talento y el contrato, nosotros ponemos el músculo financiero.</span></div></div>
-        <div class="step"><div class="step-n">3</div><div class="step-body"><strong>Aprobación y firma <span class="step-tag">Día 2–3</span></strong><span>Te enviamos la oferta con condiciones exactas. Firmas la cesión de derechos económicos. Sin letra pequeña.</span></div></div>
-        <div class="step"><div class="step-n">4</div><div class="step-body"><strong>Desembolso al proveedor <span class="step-tag">Día 3–4</span></strong><span>Swala transfiere el 100% directamente a tu proveedor. Tú produces y entregas.</span></div></div>
-        <div class="step"><div class="step-n">5</div><div class="step-body"><strong>Tu cliente paga, Swala liquida <span class="step-tag">Al vencimiento</span></strong><span>El cliente paga a la cuenta de Swala. Descontamos los costos y te transferimos tu saldo neto.</span></div></div>
-      </div>
+    <!-- SECTION 4: POR QUÉ SWALA -->
+    <section class="sec bg-hueso" id="por-que-swala">
+        <div class="container">
+            <div class="sec-header rv">
+                <h2>Lo que nos hace <span class="text-lima-dark">diferentes</span></h2>
+            </div>
 
-      <div class="rv d4" style="margin-bottom:16px">
-        <div class="sec-tag" style="margin-bottom:12px">Lo que necesitas</div>
-        <div class="req-list">
-          <div class="req-item"><div class="req-dot"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="#6D28D9" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>Contrato firmado con pagador sólido</div>
-          <div class="req-item"><div class="req-dot"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="#6D28D9" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>RUT de tu empresa y del cliente final</div>
-          <div class="req-item"><div class="req-dot"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="#6D28D9" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>Cédula del representante legal</div>
-          <div class="req-item"><div class="req-dot"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="#6D28D9" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>Certificación del proveedor de materias primas</div>
+            <div class="diff-grid">
+                <!-- Diferenciador 1 -->
+                <div class="diff-item rv">
+                    <div class="diff-icon">🎯</div>
+                    <h3>Evaluamos a tu cliente, no tu historial</h3>
+                    <p>Los bancos miran tu pasado. Nosotros miramos la solidez de quien te va a pagar.</p>
+                </div>
+
+                <!-- Diferenciador 2 -->
+                <div class="diff-item rv">
+                    <div class="diff-icon">🛡️</div>
+                    <h3>Sin hipotecar tus activos personales</h3>
+                    <p>Tu operación es el respaldo. No tu casa, no tu carro, no tu patrimonio personal.</p>
+                </div>
+
+                <!-- Diferenciador 3 -->
+                <div class="diff-item rv">
+                    <div class="diff-icon">⚡</div>
+                    <h3>Respuesta en menos de 48 horas</h3>
+                    <p>Sabemos que en tu negocio el tiempo es dinero. No te hacemos esperar semanas.</p>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
+    </section>
 
-    <!-- Simulator -->
-    <div>
-      <div class="sim-card rv d2">
-        <div class="sim-title">Simula tu operación</div>
-        <div class="sim-sub">Ingresa los datos de tu contrato y ve exactamente cuánto recibirías tú al final.</div>
-        <div class="sf"><label>Monto a financiar (COP)</label><input type="text" id="sm" placeholder="Ej: 65.000.000" oninput="sfmt(this);calc()"></div>
-        <div class="sf"><label>Plazo de pago (días)</label><input type="number" id="sp" placeholder="Ej: 90" min="30" max="180" oninput="calc()"></div>
-        <div class="sf"><label>Valor total del contrato (COP)</label><input type="text" id="sc" placeholder="Ej: 150.000.000" oninput="sfmt(this);calc()"></div>
-        <div class="sf"><label>¿Quién te paga?</label>
-          <select id="sq" onchange="calc()">
-            <option value="">Selecciona...</option>
-            <option value="p">Entidad pública (Ecopetrol, FF.MM., Ministerios)</option>
-            <option value="g">Gran empresa privada (Home Center, Almacenes…)</option>
-            <option value="m">Empresa mediana</option>
-          </select>
+    <!-- SECTION 5: CALCULADORAS -->
+    <section class="sec bg-hueso" id="calculadoras">
+        <div class="container">
+            <div class="sec-header rv">
+                <h2>¿Quieres simular cuánto podría <span class="text-lima-dark">costarte?</span></h2>
+                <p class="sec-sub">Estas calculadoras te dan una idea orientativa. Las condiciones reales dependen de la solidez de tu pagador.</p>
+            </div>
+
+            <div class="calc-tabs rv">
+                <button class="tab-btn active" onclick="showCalc('proyectos')">Financiación de proyectos</button>
+                <button class="tab-btn" onclick="showCalc('adelanto')">Adelanto de pagos pendientes</button>
+            </div>
+
+            <div class="calc-container rv">
+                <!-- Calculadora 1: Proyectos -->
+                <div id="calc-proyectos" class="calc-box active">
+                    <div class="calc-inputs">
+                        <div class="input-group">
+                            <label>Monto a financiar (COP)</label>
+                            <input type="number" id="proj-monto" placeholder="Ej: 50000000" oninput="updateProj()">
+                        </div>
+                        <div class="input-group">
+                            <label>Plazo de pago (días)</label>
+                            <select id="proj-plazo" onchange="updateProj()">
+                                <option value="30">30 días</option>
+                                <option value="45">45 días</option>
+                                <option value="60">60 días</option>
+                                <option value="90">90 días</option>
+                                <option value="120">120 días</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Perfil del pagador</label>
+                            <select id="proj-perfil" onchange="updateProj()">
+                                <option value="1.8">Entidad pública (1.8% mes)</option>
+                                <option value="2.0">Gran empresa privada (2.0% mes)</option>
+                                <option value="2.2">Empresa mediana (2.2% mes)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="calc-results">
+                        <div class="res-item">
+                            <span>Costo de la operación</span>
+                            <strong id="proj-costo">$0</strong>
+                        </div>
+                        <div class="res-item total">
+                            <span>Lo que recibes neto</span>
+                            <strong id="proj-neto">$0</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calculadora 2: Adelanto -->
+                <div id="calc-adelanto" class="calc-box">
+                    <div class="calc-inputs">
+                        <div class="input-group">
+                            <label>Valor de la factura (COP)</label>
+                            <input type="number" id="fact-monto" placeholder="Ej: 20000000" oninput="updateFact()">
+                        </div>
+                        <div class="input-group">
+                            <label>Días hasta el vencimiento</label>
+                            <input type="number" id="fact-dias" placeholder="Ej: 45" oninput="updateFact()">
+                        </div>
+                        <div class="input-group">
+                            <label>Perfil del pagador</label>
+                            <select id="fact-perfil" onchange="updateFact()">
+                                <option value="1.8" data-perc="87">Entidad pública (87% anticipo)</option>
+                                <option value="2.0" data-perc="85">Gran empresa privada (85% anticipo)</option>
+                                <option value="2.2" data-perc="82">Empresa mediana (82% anticipo)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="calc-results">
+                        <div class="res-item">
+                            <span>Lo que recibes hoy</span>
+                            <strong id="fact-hoy">$0</strong>
+                        </div>
+                        <div class="res-item">
+                            <span>Al vencimiento</span>
+                            <strong id="fact-venc">$0</strong>
+                        </div>
+                        <div class="res-item total">
+                            <span>Costo total</span>
+                            <strong id="fact-costo">$0</strong>
+                        </div>
+                    </div>
+                </div>
+                <p class="calc-note">* Las condiciones reales dependen de la solidez de tu pagador y tu operación específica.</p>
+            </div>
         </div>
-        <div class="sim-res" id="sr">
-          <div class="sr-section-label">Lo que paga tu cliente</div>
-          <div class="sr-row"><span class="sr-l">Valor del contrato</span><span class="sr-v" id="rv-cont">—</span></div>
-          <div style="border-top:1px solid rgba(255,255,255,.06);margin:10px 0;padding-top:10px">
-            <div class="sr-section-label">Lo que se descuenta</div>
-            <div class="sr-row"><span class="sr-l">Capital Swala</span><span class="sr-v" style="color:#F87171" id="rv-cap">—</span></div>
-            <div class="sr-row"><span class="sr-l">Intereses (2% mensual)</span><span class="sr-v" style="color:#F87171" id="rv-int">—</span></div>
-            <div class="sr-row"><span class="sr-l">Fee estructuración (1%)</span><span class="sr-v" style="color:#F87171" id="rv-fee">—</span></div>
-          </div>
-          <div class="sr-total-row">
-            <span class="sr-total-l">Tu saldo neto<br><span style="font-size:11px;font-weight:400;color:rgba(255,255,255,.4);letter-spacing:.06em;text-transform:uppercase">Dinero libre para tu empresa</span></span>
-            <span class="sr-total-v" id="rv-saldo">—</span>
-          </div>
-          <div class="sr-perfil" id="rv-perfil"></div>
-          <div class="sr-note">* Simulación indicativa. El costo real se calcula sobre días exactos desde el desembolso.</div>
+    </section>
+
+    <!-- SECTION 6: FORMULARIO -->
+    <section class="sec bg-petroleo" id="formulario">
+        <div class="container">
+            <div class="form-wrapper rv">
+                <div class="sec-header">
+                    <h2>Cuéntanos tu operación y te <span class="text-lima">respondemos hoy</span></h2>
+                    <p class="sec-sub">Sin compromisos. Solo queremos entender tu caso.</p>
+                </div>
+
+                <form id="contact-form" action="https://formspree.io/f/mbdpbnyw" method="POST" onsubmit="handleForm(event)">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label>Nombre completo</label>
+                            <input type="text" name="nombre" placeholder="Tu nombre" required>
+                        </div>
+                        <div class="input-group">
+                            <label>WhatsApp</label>
+                            <input type="tel" name="whatsapp" placeholder="300 000 0000" required>
+                        </div>
+                        <div class="input-group full-width">
+                            <label>¿Cuál describe mejor tu situación?</label>
+                            <select name="situacion" required>
+                                <option value="" disabled selected>Selecciona tu situación</option>
+                                <option value="contrato-sin-capital">Tengo un contrato pero no el capital para ejecutarlo</option>
+                                <option value="orden-sin-capital">Tengo una orden de compra pero necesito capital para arrancar</option>
+                                <option value="factura-pendiente">Ya entregué y facturé, pero necesito liquidez ahora</option>
+                                <option value="saber-mas">Quiero saber más sobre Swala</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">Quiero que me contacten</button>
+                    <div id="form-ok" class="form-msg">
+                        ¡Listo! Recibimos tu información. Te escribimos en menos de 48 horas hábiles al WhatsApp que nos dejaste. 🙌
+                    </div>
+                </form>
+            </div>
         </div>
-        <a href="#form-pro" class="cta-apply">Quiero aplicar a Swala Pro →</a>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- FORM -->
-<section id="form-pro" class="form-sec">
-  <div style="max-width:600px;margin:0 auto">
-    <div class="sec-tag rv">Aplicar ahora</div>
-    <h2 style="font-family:'Fraunces',serif;font-size:clamp(26px,3.5vw,42px);font-weight:300;color:var(--bk);line-height:1.1;margin-bottom:12px" class="rv d1">Cuéntanos tu <em style="font-style:italic;color:var(--p-ol)">operación</em></h2>
-    <p style="font-size:16px;color:var(--g5);margin-bottom:36px;line-height:1.65" class="rv d2">Te respondemos en menos de 24 horas hábiles.</p>
-    <div style="background:#fff;border:1px solid var(--g2);border-radius:16px;padding:32px;transition:box-shadow .3s" id="pro-form-wrap" class="rv d3" onmouseenter="this.style.boxShadow='0 16px 48px rgba(109,40,217,.08)'" onmouseleave="this.style.boxShadow='none'">
-      <form onsubmit="sendProForm(event)">
-        <div class="mf-row"><label style="color:var(--g5)">Tu nombre *</label><input type="text" placeholder="María Fernández" required=""></div>
-        <div class="mf-row"><label style="color:var(--g5)">WhatsApp *</label><input type="tel" placeholder="+57 300 000 0000" required=""></div>
-        <div class="mf-row"><label style="color:var(--g5)">Nombre de tu empresa *</label><input type="text" placeholder="Confecciones XYZ" required=""></div>
-        <div class="mf-row"><label style="color:var(--g5)">¿Quién es tu cliente final? *</label><input type="text" placeholder="Ej: Ecopetrol, Fuerzas Militares, Almacén Éxito..." required=""></div>
-        <div class="mf-row"><label style="color:var(--g5)">Monto a financiar (COP) *</label><input type="text" placeholder="Ej: 65.000.000" oninput="sfmt(this)" required=""></div>
-        <div class="mf-row"><label style="color:var(--g5)">¿Qué vas a producir? *</label><input type="text" placeholder="Overoles industriales, dotación, uniformes..." required=""></div>
-        <div class="mf-row"><label style="color:var(--g5)">Cuéntanos algo más (opcional)</label><textarea rows="2" placeholder="Plazo del contrato, fecha de entrega, lo que quieras contarnos..."></textarea></div>
-        <button type="submit" class="cta-apply" style="margin-top:8px">Enviar solicitud →</button>
-      </form>
-      <div id="pro-form-ok" style="display:none;text-align:center;padding:32px">
-        <div style="font-size:32px;margin-bottom:16px">✅</div>
-        <div style="font-family:'Fraunces',serif;font-size:22px;color:var(--bk);margin-bottom:8px">¡Recibido!</div>
-        <div style="font-size:15px;color:var(--g5);line-height:1.65">Te contactamos en menos de 24 horas hábiles.<br>Revisa tu WhatsApp.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- OTHER OPTIONS -->
-<section class="opts-sec" id="opciones">
-  <div style="max-width:1000px;margin:0 auto">
-    <div class="sec-tag rv">Más soluciones</div>
-    <h2 class="sec-title rv d1">Otras formas en que<br><em>Swala puede ayudarte</em></h2>
-    <p class="sec-sub rv d2">No solo contratos grandes. Si tienes otras necesidades de capital, cuéntanos y evaluamos juntos.</p>
-    <div class="opts-grid">
-      <div class="opt-card rv d1" onclick="toggleOpt('opt1')">
-        <div class="opt-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="13" rx="2" stroke="#6D28D9" stroke-width="1.8"></rect><path d="M3 10h18M8 6V4M16 6V4" stroke="#6D28D9" stroke-width="1.8" stroke-linecap="round"></path><path d="M7 14h4M7 17h6" stroke="#6D28D9" stroke-width="1.8" stroke-linecap="round"></path></svg></div>
-        <div class="opt-title">"Necesito comprar tela pero el cupo ya se me acabó"</div>
-        <div class="opt-desc">Tu proveedor no te da más crédito pero tienes pedidos esperando. El cupo lleno no puede ser el techo de tu empresa.</div>
-        <div class="opt-tag">Capital de trabajo</div>
-        <div class="opt-cta" id="cta1">Cuéntanos tu caso <span>→</span></div>
-        <div class="opt-form" id="opt1">
-          <div class="opt-form-inner">
-            <form onsubmit="sendForm(event,'opt1')">
-              <div class="mf-row"><label>Tu nombre</label><input type="text" placeholder="María Fernández" required=""></div>
-              <div class="mf-row"><label>WhatsApp</label><input type="tel" placeholder="+57 300 000 0000" required=""></div>
-              <div class="mf-row"><label>¿Cuánto necesitas?</label><input type="text" placeholder="Ej: 30.000.000" oninput="sfmt(this)"></div>
-              <div class="mf-row"><label>¿Qué necesitas comprar?</label><input type="text" placeholder="Tela, hilos, cierres, insumos..."></div>
-              <button class="mf-submit" type="submit">Enviar →</button>
-              <div class="mf-ok" id="ok-opt1">✅ Recibido — te contactamos en menos de 24h</div>
-            </form>
-          </div>
+    <!-- FOOTER -->
+    <footer class="bg-petroleo-dark">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo font-serif">Swala<span>Capital</span></a>
+                    <p>Habilitadores de Sueños Industriales</p>
+                </div>
+                <div class="footer-contact">
+                    <p>operaciones@swala-capital.com</p>
+                    <p>301 730 3739</p>
+                    <p>Bogotá, Colombia</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Swala Capital. Todos los derechos reservados.</p>
+            </div>
         </div>
-      </div>
+    </footer>
 
-      <div class="opt-card rv d2" onclick="toggleOpt('opt2')">
-        <div class="opt-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#6D28D9" stroke-width="1.8"></circle><path d="M12 7v5l3 3" stroke="#6D28D9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
-        <div class="opt-title">"Ya entregué pero me toca esperar meses para que me paguen"</div>
-        <div class="opt-desc">Entregaste el pedido, tienes la factura en mano, pero tu cliente paga a 60 o 90 días y tú necesitas liquidez ahora.</div>
-        <div class="opt-tag">Anticipo de cartera</div>
-        <div class="opt-cta" id="cta2">Cuéntanos tu caso <span>→</span></div>
-        <div class="opt-form" id="opt2">
-          <div class="opt-form-inner">
-            <form onsubmit="sendForm(event,'opt2')">
-              <div class="mf-row"><label>Tu nombre</label><input type="text" placeholder="María Fernández" required=""></div>
-              <div class="mf-row"><label>WhatsApp</label><input type="tel" placeholder="+57 300 000 0000" required=""></div>
-              <div class="mf-row"><label>¿Cuánto vale la factura?</label><input type="text" placeholder="Ej: 80.000.000" oninput="sfmt(this)"></div>
-              <div class="mf-row"><label>¿En cuántos días te pagan?</label><input type="number" placeholder="Ej: 90" min="1"></div>
-              <button class="mf-submit" type="submit">Enviar →</button>
-              <div class="mf-ok" id="ok-opt2">✅ Recibido — te contactamos en menos de 24h</div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-      <div class="opt-card rv d3" onclick="toggleOpt('opt3')">
-        <div class="opt-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="#6D28D9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
-        <div class="opt-title">"El dinero siempre me frena aunque tenga pedidos"</div>
-        <div class="opt-desc">Tienes la demanda, tienes la capacidad, pero el flujo de caja no alcanza para meterte en todos los negocios que podrías.</div>
-        <div class="opt-tag">Cuéntanos tu caso</div>
-        <div class="opt-cta" id="cta3">Cuéntanos tu caso <span>→</span></div>
-        <div class="opt-form" id="opt3">
-          <div class="opt-form-inner">
-            <form onsubmit="sendForm(event,'opt3')">
-              <div class="mf-row"><label>Tu nombre</label><input type="text" placeholder="María Fernández" required=""></div>
-              <div class="mf-row"><label>WhatsApp</label><input type="tel" placeholder="+57 300 000 0000" required=""></div>
-              <div class="mf-row"><label>Cuéntanos tu situación</label><textarea rows="3" placeholder="¿Qué oportunidad se te está yendo por falta de capital?"></textarea></div>
-              <button class="mf-submit" type="submit">Enviar →</button>
-              <div class="mf-ok" id="ok-opt3">✅ Recibido — te contactamos en menos de 24h</div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <span class="f-logo">Swala <em>Capital</em></span>
-  <p>Fintech especializada en el sector textil confección colombiano.<br>
-  <a href="mailto:operaciones@swala-capital.com">operaciones@swala-capital.com</a></p>
-  <p style="margin-top:16px;font-size:11px">© 2026 Swala Capital · <a href="#privacidad" onclick="document.getElementById('priv').style.display='block'">Política de datos</a></p>
-</footer>
-
-<!-- POLÍTICA DE DATOS -->
-<div id="priv" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;overflow-y:auto;padding:40px 5vw" onclick="if(event.target===this)this.style.display='none'">
-  <div style="background:var(--w);max-width:600px;margin:0 auto;border-radius:16px;padding:40px;position:relative">
-    <button onclick="document.getElementById('priv').style.display='none'" style="position:absolute;top:20px;right:20px;background:none;border:none;font-size:20px;cursor:pointer;color:var(--g5)">✕</button>
-    <h3 style="font-family:'Fraunces',serif;font-size:22px;color:var(--bk);margin-bottom:20px">Política de Tratamiento de Datos</h3>
-    <div style="font-size:14px;color:var(--g5);line-height:1.75">
-      <p style="margin-bottom:12px"><strong>Responsable:</strong> María Alejandra Fernández, proyecto Swala Capital. Contacto: operaciones@swala-capital.com</p>
-      <p style="margin-bottom:12px"><strong>Finalidad:</strong> Sus datos serán utilizados para evaluar la viabilidad de una operación de financiación, contactarlo con una propuesta o para solicitar información adicional, y gestionar la relación comercial si se concreta una operación.</p>
-      <p style="margin-bottom:12px"><strong>Derechos:</strong> En cualquier momento puedes conocer, actualizar, rectificar o suprimir tus datos. Escríbenos a operaciones@swala-capital.com con el asunto "Derechos HABEAS DATA".</p>
-    </div>
-  </div>
-</div>
-
-
-
-
-
-<script src="script.js"></script>
-</body></html>
+    <script src="script.js"></script>
+</body>
+</html>
