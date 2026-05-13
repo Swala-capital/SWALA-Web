@@ -1,255 +1,378 @@
-import { motion } from 'framer-motion';
-import { FileText, Package, Clock, ChevronRight } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { FileText, Package, Clock, ChevronRight, MessageCircle, Zap, DollarSign } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
 
+/* ─── ANIMACIONES GLOBALES ─── */
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (delay = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] },
+  }),
+};
+
+const fadeIn = {
+  hidden: { opacity: 0 },
+  visible: (delay = 0) => ({
+    opacity: 1,
+    transition: { duration: 0.6, delay },
+  }),
+};
+
+/* ─── ORBE ANIMADO ─── */
+const Orb = ({ color, size, top, left, right, bottom, delay = 0, duration = 20, dx = 80, dy = 60 }) => (
+  <motion.div
+    animate={{ x: [0, dx, 0], y: [0, dy, 0], scale: [1, 1.15, 1] }}
+    transition={{ duration, repeat: Infinity, ease: 'easeInOut', delay }}
+    style={{
+      position: 'absolute',
+      width: size, height: size,
+      top, left, right, bottom,
+      borderRadius: '50%',
+      background: `radial-gradient(circle, ${color} 0%, transparent 70%)`,
+      filter: 'blur(80px)',
+      pointerEvents: 'none',
+    }}
+  />
+);
+
+/* ─── CONECTOR ENTRE SECCIONES ─── */
+const SectionConnector = ({ from, to }) => (
+  <div style={{
+    height: '120px',
+    background: `linear-gradient(to bottom, ${from}, ${to})`,
+    position: 'relative',
+    zIndex: 1,
+  }} />
+);
+
+/* ─── TARJETA DE SITUACIÓN ─── */
+const SituationCard = ({ icon, title, desc, delay }) => (
+  <motion.div
+    variants={fadeUp}
+    custom={delay}
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true, amount: 0.2 }}
+    whileHover={{ y: -10, transition: { duration: 0.3 } }}
+    style={{
+      background: '#fff',
+      padding: '48px',
+      borderRadius: '24px',
+      border: '1px solid rgba(8,69,86,0.06)',
+      boxShadow: '0 10px 40px rgba(8,69,86,0.05)',
+      transition: 'border-color 0.4s, box-shadow 0.4s',
+      cursor: 'default',
+    }}
+    className="sit-card"
+  >
+    <div style={{ marginBottom: '28px', color: 'var(--color-petroleo)' }}>{icon}</div>
+    <h3 style={{
+      fontFamily: 'var(--font-display)', fontSize: '22px',
+      color: 'var(--color-petroleo)', marginBottom: '16px', lineHeight: 1.3,
+    }}>{title}</h3>
+    <p style={{ color: 'var(--color-gris)', fontSize: '16px', lineHeight: 1.7 }}>{desc}</p>
+  </motion.div>
+);
+
+/* ─── TARJETA DE PASO ─── */
+const StepCard = ({ number, icon, title, desc, delay }) => (
+  <motion.div
+    variants={fadeUp}
+    custom={delay}
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true, amount: 0.2 }}
+    whileHover={{ y: -8, transition: { duration: 0.3 } }}
+    style={{
+      position: 'relative',
+      padding: '40px',
+      background: 'rgba(255,255,255,0.04)',
+      borderRadius: '24px',
+      border: '1px solid rgba(255,255,255,0.07)',
+      overflow: 'hidden',
+      cursor: 'default',
+    }}
+    className="step-card"
+  >
+    {/* Número decorativo de fondo */}
+    <div style={{
+      position: 'absolute', top: '16px', right: '24px',
+      fontFamily: 'var(--font-display)', fontSize: '80px',
+      color: 'rgba(230,255,40,0.07)', lineHeight: 1, userSelect: 'none',
+    }}>{number}</div>
+
+    {/* Caja de icono */}
+    <div style={{
+      width: '52px', height: '52px',
+      background: 'rgba(230,255,40,0.1)',
+      borderRadius: '14px',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      marginBottom: '28px',
+      color: 'var(--color-lima)',
+    }}>{icon}</div>
+
+    <h3 style={{
+      fontFamily: 'var(--font-display)', fontSize: '22px',
+      color: '#fff', marginBottom: '14px', lineHeight: 1.3,
+    }}>{title}</h3>
+    <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '15px', lineHeight: 1.7 }}>{desc}</p>
+  </motion.div>
+);
+
+/* ─── APP PRINCIPAL ─── */
 const App = () => {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   return (
-    <div className="app-root">
-      {/* BACKGROUND DYNAMICS */}
-      <div className="bg-glow">
-        <motion.div 
-          animate={{
-            x: [0, 100, 0],
-            y: [0, 50, 0],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          style={{ 
-            position: 'absolute', top: '-10%', right: '-10%', width: '800px', height: '800px', 
-            borderRadius: '50%', background: 'radial-gradient(circle, rgba(230, 255, 40, 0.08) 0%, transparent 70%)', filter: 'blur(80px)' 
-          }}
-        />
-        <motion.div 
-          animate={{
-            x: [0, -80, 0],
-            y: [0, 100, 0],
-            scale: [1, 1.1, 1],
-          }}
-          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          style={{ 
-            position: 'absolute', bottom: '-10%', left: '-10%', width: '600px', height: '600px', 
-            borderRadius: '50%', background: 'radial-gradient(circle, rgba(8, 69, 86, 0.04) 0%, transparent 70%)', filter: 'blur(80px)' 
-          }}
-        />
-      </div>
+    <div style={{ position: 'relative' }}>
 
-      {/* NAVIGATION */}
-      <nav className={scrolled ? 'scrolled' : ''}>
+      {/* ── NAVEGACIÓN ── */}
+      <nav style={{
+        position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 1000,
+        height: scrolled ? '68px' : '80px',
+        background: scrolled ? 'rgba(8,69,86,0.96)' : 'transparent',
+        backdropFilter: scrolled ? 'blur(12px)' : 'none',
+        borderBottom: scrolled ? '1px solid rgba(255,255,255,0.08)' : 'none',
+        display: 'flex', alignItems: 'center',
+        transition: 'all 0.5s cubic-bezier(0.16,1,0.3,1)',
+      }}>
         <div className="container nav-wrapper">
-          <a href="#" className="logo">
-            Swala<span>Capital</span>
-          </a>
-          <a href="#formulario" className="btn-nav">
-            Quiero hablar con Swala
-          </a>
+          <a href="#" className="logo">Swala<span>Capital</span></a>
+          <a href="#formulario" className="btn-nav">Quiero hablar con Swala</a>
         </div>
       </nav>
 
-      {/* HERO SECTION */}
-      <header className="hero">
-        <div className="container">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+      {/* ══════════════════════════════════
+          SECCIÓN 1 — HERO (Petróleo)
+      ══════════════════════════════════ */}
+      <header style={{
+        minHeight: '100vh',
+        background: 'var(--color-petroleo)',
+        display: 'flex', alignItems: 'center',
+        paddingTop: '80px',
+        position: 'relative',
+        overflow: 'hidden',
+      }}>
+        {/* Orbes internos del Hero */}
+        <Orb color="rgba(230,255,40,0.10)" size="700px" top="-15%" right="-10%" duration={18} dx={60} dy={40} />
+        <Orb color="rgba(8,45,56,0.6)"    size="500px" bottom="-20%" left="-5%"  duration={24} delay={3} dx={-40} dy={60} />
+
+        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            animate="visible"
             className="hero-content"
           >
-            <h1>
-              ¿El dinero te <span className="accent">frena</span> aunque tengas pedidos?
+            <motion.p
+              variants={fadeIn}
+              custom={0.2}
+              initial="hidden"
+              animate="visible"
+              style={{
+                fontSize: '12px', fontWeight: 700, letterSpacing: '0.15em',
+                textTransform: 'uppercase', color: 'var(--color-lima)',
+                marginBottom: '24px',
+              }}
+            >
+              Capital para confeccionistas colombianos
+            </motion.p>
+
+            <h1 className="hero-h1">
+              ¿El dinero te <span className="accent">frena</span><br />aunque tengas pedidos?
             </h1>
-            <p className="hero-sub">
-              Conectamos confeccionistas colombianos con el capital que necesitan para ejecutar sus pedidos. Sin hipotecas. Sin historial crediticio.
-            </p>
-            <div className="hero-actions-container">
+
+            <motion.p variants={fadeUp} custom={0.2} initial="hidden" animate="visible" className="hero-sub">
+              Conectamos confeccionistas colombianos con el capital que necesitan para ejecutar sus pedidos.
+              Sin hipotecas. Sin historial crediticio.
+            </motion.p>
+
+            <motion.div variants={fadeUp} custom={0.4} initial="hidden" animate="visible" className="hero-actions-container">
               <a href="#formulario" className="btn-primary">
                 Quiero hablar con Swala
                 <ChevronRight size={20} />
               </a>
               <div className="hero-badges">
                 <span>Sector Confección</span>
-                <div className="dot"></div>
-                <span>Respuesta 48h</span>
+                <div className="dot" />
+                <span>Respuesta en 48h</span>
               </div>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       </header>
 
-      {/* SECTION 2: SITUACIONES */}
-      <section className="sec" id="situaciones">
-        <div className="container">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+      {/* Conector Hero → Situaciones */}
+      <SectionConnector from="var(--color-petroleo)" to="var(--color-blanco-hueso)" />
+
+      {/* ══════════════════════════════════
+          SECCIÓN 2 — SITUACIONES (Hueso)
+      ══════════════════════════════════ */}
+      <section id="situaciones" style={{
+        background: 'var(--color-blanco-hueso)',
+        padding: '100px 0 120px',
+        position: 'relative',
+        overflow: 'hidden',
+      }}>
+        {/* Orbe suave Lima, apenas perceptible en el fondo hueso */}
+        <Orb color="rgba(184,217,0,0.08)" size="600px" top="10%" right="-10%" duration={22} delay={1} dx={-50} dy={40} />
+
+        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            className="sec-title"
+            style={{ textAlign: 'center', marginBottom: '72px' }}
           >
-            <h2>
-              Sabemos lo que <span className="accent">vives</span> día a día
+            <h2 className="sec-heading">
+              Sabemos lo que <span style={{ color: 'var(--color-lima-dark)' }}>vives</span> día a día
             </h2>
+            <p style={{ color: 'var(--color-gris)', maxWidth: '520px', margin: '16px auto 0', fontSize: '17px', lineHeight: 1.6 }}>
+              Tres situaciones que bloquean a los mejores confeccionistas del país. Nosotros las resolvemos.
+            </p>
           </motion.div>
 
           <div className="grid-3">
-            <SituationCard 
-              icon={<FileText color="#084556" size={32} />}
-              title="Tengo un contrato pero no el capital para ejecutarlo"
-              desc="Te ganaste el negocio pero te falta el impulso inicial para cumplir con la producción."
+            <SituationCard
+              icon={<FileText size={32} />}
+              title="Tengo el contrato pero no el capital para ejecutarlo"
+              desc="Ganaste el negocio. Ahora necesitas el impulso para cumplir sin comprometer lo que construiste."
               delay={0.1}
             />
-            <SituationCard 
-              icon={<Package color="#084556" size={32} />}
+            <SituationCard
+              icon={<Package size={32} />}
               title="Tengo la orden de compra pero necesito capital para arrancar"
-              desc="La materia prima y la mano de obra no esperan. Nosotros te habilitamos el flujo."
+              desc="La materia prima y la mano de obra no esperan. Te habilitamos el flujo para que no pierdas el pedido."
               delay={0.2}
             />
-            <SituationCard 
-              icon={<Clock color="#084556" size={32} />}
+            <SituationCard
+              icon={<Clock size={32} />}
               title="Ya entregué y facturé, pero necesito liquidez ahora mismo"
-              desc="No esperes 60 o 90 días. Te adelantamos el pago de tus facturas hoy mismo."
+              desc="No esperes 60 o 90 días. Te adelantamos el pago de tus facturas para que sigas produciendo hoy."
               delay={0.3}
             />
           </div>
         </div>
       </section>
 
-      {/* SECTION 3: CÓMO FUNCIONA */}
-      <section className="sec" id="proceso" style={{ backgroundColor: 'var(--color-petroleo)', color: '#fff' }}>
-        <div className="container">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+      {/* Conector Situaciones → Proceso */}
+      <SectionConnector from="var(--color-blanco-hueso)" to="var(--color-petroleo)" />
+
+      {/* ══════════════════════════════════
+          SECCIÓN 3 — CÓMO FUNCIONA (Petróleo)
+      ══════════════════════════════════ */}
+      <section id="proceso" style={{
+        background: 'var(--color-petroleo)',
+        padding: '100px 0 120px',
+        position: 'relative',
+        overflow: 'hidden',
+      }}>
+        {/* Orbes en la sección oscura */}
+        <Orb color="rgba(230,255,40,0.06)" size="800px" top="-20%" left="-15%"  duration={26} delay={2} dx={70}  dy={50} />
+        <Orb color="rgba(5,45,56,0.8)"    size="500px" bottom="-15%" right="-5%" duration={20} delay={0} dx={-50} dy={-40} />
+
+        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            className="sec-title"
-            style={{ marginBottom: '80px' }}
+            style={{ textAlign: 'center', marginBottom: '80px' }}
           >
-            <h2 style={{ color: '#fff' }}>
-              Tu capital en <span className="accent">3 simples pasos</span>
+            <h2 className="sec-heading" style={{ color: '#fff' }}>
+              Tu capital en <span style={{ color: 'var(--color-lima)' }}>3 pasos</span>
             </h2>
+            <p style={{ color: 'rgba(255,255,255,0.5)', maxWidth: '480px', margin: '16px auto 0', fontSize: '17px', lineHeight: 1.6 }}>
+              Sin burocracia. Sin filas. Sin hipotecar tu negocio.
+            </p>
           </motion.div>
 
-          <div className="grid-3">
-            <StepCard 
-              number="01"
-              icon={<ChevronRight className="text-[#E6FF28]" size={24} />}
-              title="Hablemos de tu negocio"
-              desc="Cuéntanos sobre tus pedidos y necesidades de capital. Entendemos el ritmo de la confección."
-              delay={0.1}
-            />
-            <StepCard 
-              number="02"
-              icon={<ChevronRight className="text-[#E6FF28]" size={24} />}
-              title="Evaluación ágil"
-              desc="Analizamos tus órdenes de compra o facturas. Sin burocracia pesada ni trámites infinitos."
-              delay={0.2}
-            />
-            <StepCard 
-              number="03"
-              icon={<ChevronRight className="text-[#E6FF28]" size={24} />}
-              title="Recibe el capital"
-              desc="Desembolso directo para que tu producción no se detenga. Así de simple."
-              delay={0.3}
-            />
+          {/* Línea conectora horizontal entre pasos */}
+          <div style={{ position: 'relative' }}>
+            <div style={{
+              position: 'absolute', top: '52px', left: '20%', right: '20%', height: '1px',
+              background: 'linear-gradient(to right, transparent, rgba(230,255,40,0.2), transparent)',
+              zIndex: 0,
+            }} />
+            <div className="grid-3" style={{ position: 'relative', zIndex: 1 }}>
+              <StepCard
+                number="01"
+                icon={<MessageCircle size={24} />}
+                title="Hablemos de tu negocio"
+                desc="Cuéntanos sobre tus pedidos y necesidades. Entendemos el ritmo de la confección colombiana."
+                delay={0.1}
+              />
+              <StepCard
+                number="02"
+                icon={<Zap size={24} />}
+                title="Evaluación ágil"
+                desc="Analizamos tus órdenes o facturas en menos de 48 horas. Sin papeleo infinito ni visitas al banco."
+                delay={0.2}
+              />
+              <StepCard
+                number="03"
+                icon={<DollarSign size={24} />}
+                title="Recibe tu capital"
+                desc="El dinero llega directo para que tu producción no se detenga. Así de claro."
+                delay={0.3}
+              />
+            </div>
           </div>
         </div>
       </section>
 
+      {/* Estilos internos */}
       <style>{`
-        .hero-actions-container { display: flex; flex-direction: column; gap: 24px; align-items: flex-start; }
-        @media (min-width: 768px) {
-          .hero-actions-container { flex-direction: row; align-items: center; gap: 32px; }
-        }
-        
-        /* STEP CARD STYLES */
-        .step-card {
-          position: relative;
-          padding: 40px;
-          background: rgba(255,255,255,0.03);
-          border-radius: 24px;
-          border: 1px solid rgba(255,255,255,0.05);
-          transition: var(--transition);
-        }
-        
-        .step-card:hover {
-          background: rgba(255,255,255,0.06);
-          border-color: var(--color-lima);
-          transform: translateY(-8px);
-        }
-        
-        .step-number {
+        .hero-h1 {
           font-family: var(--font-display);
-          font-size: 64px;
-          color: rgba(230, 255, 40, 0.1);
-          position: absolute;
-          top: 20px;
-          right: 30px;
-          line-height: 1;
-        }
-        
-        .step-card h3 {
-          font-family: var(--font-display);
-          font-size: 24px;
+          font-size: clamp(48px, 7vw, 86px);
+          line-height: 1.05;
+          margin-bottom: 28px;
           color: #fff;
-          margin-bottom: 16px;
-          position: relative;
         }
-        
-        .step-card p {
-          color: rgba(255,255,255,0.6);
-          font-size: 16px;
-          line-height: 1.6;
+        .hero-sub {
+          font-size: clamp(17px, 2vw, 21px);
+          color: rgba(255,255,255,0.65);
+          margin-bottom: 52px;
+          max-width: 600px;
+          line-height: 1.65;
         }
-
-        .icon-box {
-          width: 48px;
-          height: 48px;
-          background: rgba(230, 255, 40, 0.1);
-          border-radius: 12px;
+        .hero-actions-container {
           display: flex;
+          flex-wrap: wrap;
+          gap: 24px;
           align-items: center;
-          justify-content: center;
-          margin-bottom: 24px;
+        }
+        .sec-heading {
+          font-family: var(--font-display);
+          font-size: clamp(34px, 5vw, 54px);
+          color: var(--color-petroleo);
+          line-height: 1.1;
+        }
+        .sit-card:hover {
+          border-color: var(--color-lima) !important;
+          box-shadow: 0 24px 60px rgba(8,69,86,0.1) !important;
+        }
+        .step-card:hover {
+          background: rgba(255,255,255,0.07) !important;
+          border-color: var(--color-lima) !important;
+        }
+        @media (max-width: 768px) {
+          .grid-3 { grid-template-columns: 1fr !important; }
+          .hero-actions-container { flex-direction: column; align-items: flex-start; }
         }
       `}</style>
     </div>
   );
 };
-
-const StepCard = ({ number, icon, title, desc, delay }) => (
-  <motion.div 
-    initial={{ opacity: 0, scale: 0.9 }}
-    whileInView={{ opacity: 1, scale: 1 }}
-    viewport={{ once: true }}
-    transition={{ delay, duration: 0.5 }}
-    className="step-card"
-  >
-    <div className="step-number">{number}</div>
-    <div className="icon-box">{icon}</div>
-    <h3>{title}</h3>
-    <p>{desc}</p>
-  </motion.div>
-);
-
-const SituationCard = ({ icon, title, desc, delay }) => (
-  <motion.div 
-    initial={{ opacity: 0, y: 30 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ delay }}
-    whileHover={{ y: -10 }}
-    className="sit-card"
-  >
-    <div className="icon-wrapper">{icon}</div>
-    <h3>{title}</h3>
-    <p>{desc}</p>
-  </motion.div>
-);
 
 export default App;
