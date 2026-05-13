@@ -120,15 +120,122 @@ const App = () => {
         </div>
       </section>
 
+      {/* SECTION 3: CÓMO FUNCIONA */}
+      <section className="sec" id="proceso" style={{ backgroundColor: 'var(--color-petroleo)', color: '#fff' }}>
+        <div className="container">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="sec-title"
+            style={{ marginBottom: '80px' }}
+          >
+            <h2 style={{ color: '#fff' }}>
+              Tu capital en <span className="accent">3 simples pasos</span>
+            </h2>
+          </motion.div>
+
+          <div className="grid-3">
+            <StepCard 
+              number="01"
+              icon={<ChevronRight className="text-[#E6FF28]" size={24} />}
+              title="Hablemos de tu negocio"
+              desc="Cuéntanos sobre tus pedidos y necesidades de capital. Entendemos el ritmo de la confección."
+              delay={0.1}
+            />
+            <StepCard 
+              number="02"
+              icon={<ChevronRight className="text-[#E6FF28]" size={24} />}
+              title="Evaluación ágil"
+              desc="Analizamos tus órdenes de compra o facturas. Sin burocracia pesada ni trámites infinitos."
+              delay={0.2}
+            />
+            <StepCard 
+              number="03"
+              icon={<ChevronRight className="text-[#E6FF28]" size={24} />}
+              title="Recibe el capital"
+              desc="Desembolso directo para que tu producción no se detenga. Así de simple."
+              delay={0.3}
+            />
+          </div>
+        </div>
+      </section>
+
       <style>{`
         .hero-actions-container { display: flex; flex-direction: column; gap: 24px; align-items: flex-start; }
         @media (min-width: 768px) {
           .hero-actions-container { flex-direction: row; align-items: center; gap: 32px; }
         }
+        
+        /* STEP CARD STYLES */
+        .step-card {
+          position: relative;
+          padding: 40px;
+          background: rgba(255,255,255,0.03);
+          border-radius: 24px;
+          border: 1px solid rgba(255,255,255,0.05);
+          transition: var(--transition);
+        }
+        
+        .step-card:hover {
+          background: rgba(255,255,255,0.06);
+          border-color: var(--color-lima);
+          transform: translateY(-8px);
+        }
+        
+        .step-number {
+          font-family: var(--font-display);
+          font-size: 64px;
+          color: rgba(230, 255, 40, 0.1);
+          position: absolute;
+          top: 20px;
+          right: 30px;
+          line-height: 1;
+        }
+        
+        .step-card h3 {
+          font-family: var(--font-display);
+          font-size: 24px;
+          color: #fff;
+          margin-bottom: 16px;
+          position: relative;
+        }
+        
+        .step-card p {
+          color: rgba(255,255,255,0.6);
+          font-size: 16px;
+          line-height: 1.6;
+        }
+
+        .icon-box {
+          width: 48px;
+          height: 48px;
+          background: rgba(230, 255, 40, 0.1);
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 24px;
+        }
       `}</style>
     </div>
   );
 };
+
+const StepCard = ({ number, icon, title, desc, delay }) => (
+  <motion.div 
+    initial={{ opacity: 0, scale: 0.9 }}
+    whileInView={{ opacity: 1, scale: 1 }}
+    viewport={{ once: true }}
+    transition={{ delay, duration: 0.5 }}
+    className="step-card"
+  >
+    <div className="step-number">{number}</div>
+    <div className="icon-box">{icon}</div>
+    <h3>{title}</h3>
+    <p>{desc}</p>
+  </motion.div>
+);
 
 const SituationCard = ({ icon, title, desc, delay }) => (
   <motion.div 
