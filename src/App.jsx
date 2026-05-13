@@ -1,6 +1,6 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { FileText, Package, Clock, ChevronRight, MessageCircle, Zap, DollarSign } from 'lucide-react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
 /* ─── ANIMACIONES GLOBALES ─── */
 const fadeUp = {
@@ -330,7 +330,124 @@ const App = () => {
         </div>
       </section>
 
-      {/* Estilos internos */}
+      {/* Conector Proceso → Formulario */}
+      <SectionConnector from="var(--color-petroleo)" to="var(--color-blanco-hueso)" />
+
+      {/* ══════════════════════════════════
+          SECCIÓN 4 — FORMULARIO (Hueso)
+      ══════════════════════════════════ */}
+      <section id="formulario" style={{
+        background: 'var(--color-blanco-hueso)',
+        padding: '100px 0 140px',
+        position: 'relative',
+        overflow: 'hidden',
+      }}>
+        <Orb color="rgba(8,69,86,0.03)" size="600px" bottom="-10%" right="5%" duration={20} dx={40} dy={30} />
+        
+        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+          <div className="form-layout" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '80px', alignItems: 'center' }}>
+            
+            {/* Texto de cierre de venta */}
+            <motion.div 
+              variants={fadeUp} 
+              initial="hidden" 
+              whileInView="visible" 
+              viewport={{ once: true }}
+            >
+              <h2 className="sec-heading" style={{ textAlign: 'left', marginBottom: '24px' }}>
+                Estamos listos para <span style={{ color: 'var(--color-lima-dark)' }}>impulsar</span> tu taller
+              </h2>
+              <p style={{ color: 'var(--color-gris)', fontSize: '18px', lineHeight: 1.7, marginBottom: '40px' }}>
+                Completa el formulario y un consultor de Swala se pondrá en contacto contigo en menos de 48 horas. Sin compromisos iniciales.
+              </p>
+              
+              <div className="trust-badges" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: 'var(--color-petroleo)', fontWeight: 600 }}>
+                  <Zap size={20} color="var(--color-lima-dark)" /> Respuesta inmediata
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: 'var(--color-petroleo)', fontWeight: 600 }}>
+                  <Zap size={20} color="var(--color-lima-dark)" /> Proceso 100% digital
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: 'var(--color-petroleo)', fontWeight: 600 }}>
+                  <Zap size={20} color="var(--color-lima-dark)" /> Sin letra pequeña
+                </div>
+              </div>
+            </motion.div>
+
+            {/* El Formulario */}
+            <motion.div 
+              variants={fadeUp} 
+              initial="hidden" 
+              whileInView="visible" 
+              viewport={{ once: true }}
+              style={{
+                background: '#fff',
+                padding: '48px',
+                borderRadius: '32px',
+                boxShadow: '0 30px 80px rgba(8,69,86,0.08)',
+                border: '1px solid rgba(8,69,86,0.04)',
+              }}
+            >
+              <form name="contact" method="POST" data-netlify="true" className="swala-form">
+                <input type="hidden" name="form-name" value="contact" />
+                
+                <div className="form-group" style={{ marginBottom: '24px' }}>
+                  <label className="swala-label">Nombre Completo</label>
+                  <input className="swala-input" type="text" name="name" placeholder="Tu nombre" required />
+                </div>
+
+                <div className="form-group" style={{ marginBottom: '24px' }}>
+                  <label className="swala-label">Nombre de tu Empresa / Taller</label>
+                  <input className="swala-input" type="text" name="company" placeholder="Ej: Confecciones Medellín" required />
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '24px' }} className="mobile-stack">
+                  <div className="form-group">
+                    <label className="swala-label">Celular</label>
+                    <input className="swala-input" type="tel" name="phone" placeholder="300 000 0000" required />
+                  </div>
+                  <div className="form-group">
+                    <label className="swala-label">Ventas Mensuales</label>
+                    <select className="swala-input" name="sales" required>
+                      <option value="">Selecciona</option>
+                      <option value="1-10">1M - 10M</option>
+                      <option value="10-50">10M - 50M</option>
+                      <option value="50-100">50M - 100M</option>
+                      <option value="100+">Más de 100M</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="form-group" style={{ marginBottom: '32px' }}>
+                  <label className="swala-label">¿Qué necesitas capital para...?</label>
+                  <textarea className="swala-input" name="message" rows="3" placeholder="Ej: Comprar tela para un pedido de 500 chaquetas..." required></textarea>
+                </div>
+
+                <button type="submit" className="btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
+                  Enviar solicitud
+                </button>
+              </form>
+            </motion.div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer style={{ background: 'var(--color-petroleo-dark)', padding: '60px 0', color: 'rgba(255,255,255,0.4)', fontSize: '14px' }}>
+        <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '32px' }}>
+          <div>
+            <a href="#" className="logo" style={{ fontSize: '20px' }}>Swala<span>Capital</span></a>
+            <p style={{ marginTop: '12px' }}>&copy; 2026 Swala Capital. Todos los derechos reservados.</p>
+          </div>
+          <div style={{ display: 'flex', gap: '40px' }}>
+            <a href="#" style={{ color: 'inherit', textDecoration: 'none' }}>Términos</a>
+            <a href="#" style={{ color: 'inherit', textDecoration: 'none' }}>Privacidad</a>
+            <a href="mailto:hola@swala-capital.com" style={{ color: 'inherit', textDecoration: 'none' }}>hola@swala-capital.com</a>
+          </div>
+        </div>
+      </footer>
+
       <style>{`
         .hero-h1 {
           font-family: var(--font-display);
@@ -366,9 +483,22 @@ const App = () => {
           background: rgba(255,255,255,0.07) !important;
           border-color: var(--color-lima) !important;
         }
+        
+        /* FORM STYLES */
+        .swala-label { display: block; font-size: 13px; font-weight: 700; color: var(--color-petroleo); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .swala-input {
+          width: 100%; padding: 14px 18px; border-radius: 12px; border: 1px solid rgba(8,69,86,0.1);
+          font-family: var(--font-ui); font-size: 15px; color: var(--color-dark); transition: var(--transition);
+          background: #FDFDFB;
+        }
+        .swala-input:focus {
+          outline: none; border-color: var(--color-lima-dark); box-shadow: 0 0 0 4px rgba(230,255,40,0.15);
+        }
+
         @media (max-width: 768px) {
           .grid-3 { grid-template-columns: 1fr !important; }
           .hero-actions-container { flex-direction: column; align-items: flex-start; }
+          .mobile-stack { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </div>
