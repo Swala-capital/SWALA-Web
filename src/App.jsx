@@ -201,11 +201,18 @@ const StepCard = ({ number, icon, title, desc, delay }) => (
   </motion.div>
 );
 
-const SwalaCalculator = () => {
-  const [mode, setMode] = useState('project'); // 'project' or 'invoice'
+const SwalaCalculator = ({ onCalcChange }) => {
+  const [mode, setMode] = useState('project');
   const [amount, setAmount] = useState(10000000);
   const [days, setDays] = useState(30);
-  const [payerType, setPayerType] = useState('public'); // 'public', 'large', 'medium'
+  const [payerType, setPayerType] = useState('public');
+
+  // Notificar al App cada vez que cambie el contexto relevante
+  useEffect(() => {
+    const labels = { public: 'Entidad Pública', large: 'Gran Empresa Privada', medium: 'Empresa Mediana' };
+    const modeLabel = mode === 'project' ? 'Financiación de Proyectos' : 'Adelanto de Facturas';
+    onCalcChange({ mode: modeLabel, pagador: labels[payerType] });
+  }, [mode, payerType]);
 
   // Tasas dinámicas por perfil de pagador
   const rates = {
@@ -345,7 +352,7 @@ const SwalaCalculator = () => {
   );
 };
 
-const ContactForm = () => {
+const ContactForm = ({ calcContext }) => {
   const [status, setStatus] = useState('idle');
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -390,6 +397,9 @@ const ContactForm = () => {
         style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
       >
         <input type="hidden" name="form-name" value="contact" />
+        {/* CAMPOS DE CONTEXTO DE CALCULADORA - Invisibles para el usuario, clave para el CRM */}
+        <input type="hidden" name="producto-calculado" value={calcContext?.mode || 'No especificado'} />
+        <input type="hidden" name="perfil-pagador" value={calcContext?.pagador || 'No especificado'} />
         <div className="form-group"><label className="swala-label">Nombre completo</label><input type="text" name="nombre" className="swala-input" placeholder="Tu nombre" required /></div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
           <div className="form-group"><label className="swala-label">Empresa</label><input type="text" name="empresa" className="swala-input" placeholder="Nombre taller" required /></div>
@@ -416,6 +426,8 @@ const ContactForm = () => {
 /* ─── APP PRINCIPAL ─── */
 const App = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [calcContext, setCalcContext] = useState({ mode: 'Financiación de Proyectos', pagador: 'Entidad Pública' });
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener('scroll', onScroll);
@@ -481,7 +493,7 @@ const App = () => {
       <section id="calculadora" style={{ background: 'var(--color-blanco-hueso)', padding: '100px 0' }}>
         <div className="container">
           <h2 className="sec-heading" style={{ textAlign: 'center', marginBottom: '60px' }}>Calcula tu <span style={{ color: 'var(--color-lima-dark)' }}>liquidez</span></h2>
-          <SwalaCalculator />
+          <SwalaCalculator onCalcChange={setCalcContext} />
         </div>
       </section>
 
@@ -492,7 +504,7 @@ const App = () => {
               <h2 className="sec-heading" style={{ textAlign: 'left', marginBottom: '24px' }}>Listos para <span style={{ color: 'var(--color-lima-dark)' }}>impulsarte</span></h2>
               <p style={{ color: 'var(--color-gris)', fontSize: '18px', marginBottom: '40px' }}>Completa tus datos y un consultor te contactará en menos de 48h.</p>
             </div>
-            <ContactForm />
+            <ContactForm calcContext={calcContext} />
           </div>
         </div>
       </section>
