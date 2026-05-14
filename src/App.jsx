@@ -204,148 +204,137 @@ const StepCard = ({ number, icon, title, desc, delay }) => (
 const SwalaCalculator = ({ onCalcChange }) => {
   const [mode, setMode] = useState('project');
   const [amount, setAmount] = useState(10000000);
-  const [days, setDays] = useState(30);
+  const [days, setDays] = useState(30);           // Calc 1: selector fijo
+  const [invoiceDays, setInvoiceDays] = useState(45); // Calc 2: input libre
   const [payerType, setPayerType] = useState('public');
 
-  // Notificar al App cada vez que cambie el contexto relevante
+  // Notificar al App el contexto del lead
   useEffect(() => {
     const labels = { public: 'Entidad Pública', large: 'Gran Empresa Privada', medium: 'Empresa Mediana' };
-    const modeLabel = mode === 'project' ? 'Financiación de Proyectos' : 'Adelanto de Facturas';
+    const modeLabel = mode === 'project' ? 'Financiación de Proyectos' : 'Adelanto de Pagos Pendientes';
     onCalcChange({ mode: modeLabel, pagador: labels[payerType] });
   }, [mode, payerType]);
 
-  // Tasas dinámicas por perfil de pagador
-  const rates = {
-    public: 0.018, // 1.8% mensual
-    large: 0.020,  // 2.0% mensual
-    medium: 0.022  // 2.2% mensual
-  };
+  // ── Tasas ALL-IN (comisión ya incluida) ──────────────────────────────
+  const rates = { public: 0.018, large: 0.020, medium: 0.022 };
+  // ── % de Anticipo (solo Calc 2) ──────────────────────────────────────
+  const advancePct = { public: 0.87, large: 0.85, medium: 0.82 };
 
-  const monthlyRate = rates[payerType] || 0.025;
-  const platformFee = 0.01; // 1.0% comisión fija
-  
-  const financialCost = amount * monthlyRate * (days / 30);
-  const serviceFee = amount * platformFee;
-  const totalCost = financialCost + serviceFee;
-  const netAmount = amount - totalCost;
+  const rate = rates[payerType];
+  const fmt = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
 
-  const formatter = new Intl.NumberFormat('es-CO', {
-    style: 'currency', currency: 'COP', maximumFractionDigits: 0,
-  });
+  // ── CALC 1: Financiación de Proyectos ────────────────────────────────
+  const c1Cost   = amount * (rate / 30) * days;
+  const c1Net    = amount - c1Cost;
+
+  // ── CALC 2: Adelanto de Pagos Pendientes ─────────────────────────────
+  const c2Cost     = amount * (rate / 30) * invoiceDays;
+  const c2Today    = (amount * advancePct[payerType]) - c2Cost;
+  const c2AtExpiry = amount * (1 - advancePct[payerType]);
+
+  const payerOptions = [
+    { id: 'public', label: 'Entidad Pública',       rate: '1.8%', adv: '87%' },
+    { id: 'large',  label: 'Gran Empresa Privada',   rate: '2.0%', adv: '85%' },
+    { id: 'medium', label: 'Empresa Mediana',        rate: '2.2%', adv: '82%' },
+  ];
+
+  const ResultRow = ({ label, value, highlight }) => (
+    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.07)', alignItems: 'baseline' }}>
+      <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)' }}>{label}</span>
+      <span style={{ fontFamily: 'var(--font-display)', fontSize: highlight ? '26px' : '16px', color: highlight ? 'var(--color-lima)' : '#fff', fontWeight: 700 }}>
+        {fmt.format(value)}
+      </span>
+    </div>
+  );
 
   return (
-    <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-      {/* SELECTOR DE MODO (TABS) */}
-      <div style={{
-        display: 'flex',
-        background: 'rgba(8,69,86,0.05)',
-        padding: '6px',
-        borderRadius: '16px',
-        marginBottom: '32px',
-        gap: '4px'
-      }}>
-        <button 
-          onClick={() => setMode('project')}
-          style={{
-            flex: 1, padding: '12px', borderRadius: '12px', border: 'none', cursor: 'pointer',
-            fontFamily: 'var(--font-ui)', fontWeight: 600, fontSize: '14px',
-            background: mode === 'project' ? 'var(--color-petroleo)' : 'transparent',
-            color: mode === 'project' ? 'var(--color-lima)' : 'var(--color-petroleo)',
-            transition: '0.3s'
-          }}
-        >
-          Financiación de Proyectos
-        </button>
-        <button 
-          onClick={() => setMode('invoice')}
-          style={{
-            flex: 1, padding: '12px', borderRadius: '12px', border: 'none', cursor: 'pointer',
-            fontFamily: 'var(--font-ui)', fontWeight: 600, fontSize: '14px',
-            background: mode === 'invoice' ? 'var(--color-petroleo)' : 'transparent',
-            color: mode === 'invoice' ? 'var(--color-lima)' : 'var(--color-petroleo)',
-            transition: '0.3s'
-          }}
-        >
-          Adelanto de Facturas
-        </button>
+    <div style={{ maxWidth: '960px', margin: '0 auto' }}>
+
+      {/* ── TABS ──────────────────────────────────────────────────────── */}
+      <div style={{ display: 'flex', background: 'rgba(8,69,86,0.06)', padding: '6px', borderRadius: '16px', marginBottom: '32px', gap: '4px' }}>
+        {[{ id: 'project', label: 'Financiación de Proyectos' }, { id: 'invoice', label: 'Adelanto de Pagos Pendientes' }].map(t => (
+          <button key={t.id} onClick={() => setMode(t.id)} style={{
+            flex: 1, padding: '12px 16px', borderRadius: '12px', border: 'none', cursor: 'pointer',
+            fontFamily: 'var(--font-ui)', fontWeight: 600, fontSize: '14px', transition: '0.3s',
+            background: mode === t.id ? 'var(--color-petroleo)' : 'transparent',
+            color: mode === t.id ? 'var(--color-lima)' : 'var(--color-petroleo)',
+          }}>{t.label}</button>
+        ))}
       </div>
 
-      <motion.div 
-        key={mode}
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        style={{
-          background: '#fff', padding: '48px',
-          borderRadius: '32px', boxShadow: '0 40px 100px rgba(8,69,86,0.06)',
-          display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '60px',
-        }}
-      >
-        <div className="calc-inputs">
+      <motion.div key={mode} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+        style={{ background: '#fff', borderRadius: '32px', boxShadow: '0 40px 100px rgba(8,69,86,0.07)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '0' }}>
+
+        {/* ── PANEL IZQUIERDO: INPUTS ─────────────────────────────────── */}
+        <div style={{ padding: '48px' }}>
+
           {/* SELECTOR DE PAGADOR */}
-          <div style={{ marginBottom: '32px' }}>
-            <label className="swala-label" style={{ marginBottom: '16px', display: 'block' }}>
-              {mode === 'project' ? '¿Quién es tu cliente pagador?' : '¿Quién debe pagar la factura?'}
-            </label>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
-              {[
-                { id: 'public', label: 'Entidad Pública', rate: '1.8%' },
-                { id: 'large', label: 'Gran Privada', rate: '2.0%' },
-                { id: 'medium', label: 'Mediana', rate: '2.2%' }
-              ].map((type) => (
-                <button
-                  key={type.id}
-                  onClick={() => setPayerType(type.id)}
-                  style={{
-                    padding: '12px 8px', borderRadius: '10px', fontSize: '12px', fontWeight: 600,
-                    border: '1px solid', 
-                    borderColor: payerType === type.id ? 'var(--color-lima-dark)' : '#E5E9EC',
-                    background: payerType === type.id ? 'rgba(230,255,40,0.05)' : '#fff',
-                    color: 'var(--color-petroleo)',
-                    cursor: 'pointer', transition: '0.2s', textAlign: 'center'
-                  }}
-                >
-                  <div style={{ marginBottom: '4px' }}>{type.label}</div>
-                  <div style={{ fontSize: '10px', color: 'var(--color-gris)', fontWeight: 400 }}>Tasa {type.rate}</div>
+          <div style={{ marginBottom: '28px' }}>
+            <label className="swala-label" style={{ display: 'block', marginBottom: '12px' }}>¿Quién te paga?</label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px' }}>
+              {payerOptions.map(p => (
+                <button key={p.id} onClick={() => setPayerType(p.id)} style={{
+                  padding: '10px 6px', borderRadius: '10px', border: '1.5px solid', borderColor: payerType === p.id ? 'var(--color-lima-dark)' : '#E5E9EC',
+                  background: payerType === p.id ? 'rgba(184,217,0,0.08)' : '#FAFAFA', cursor: 'pointer', transition: '0.2s', textAlign: 'center',
+                }}>
+                  <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-petroleo)', marginBottom: '3px' }}>{p.label}</div>
+                  <div style={{ fontSize: '10px', color: 'var(--color-gris)' }}>Tasa {p.rate}{mode === 'invoice' ? ` · Anticipo ${p.adv}` : ''}</div>
                 </button>
               ))}
             </div>
           </div>
 
-          <div style={{ marginBottom: '40px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
-              <label className="swala-label">
-                {mode === 'project' ? 'Monto del contrato / orden' : 'Monto de la factura'}
-              </label>
-              <span style={{ fontWeight: 700, color: 'var(--color-petroleo)' }}>{formatter.format(amount)}</span>
-            </div>
-            <input type="range" min="1000000" max="200000000" step="1000000" value={amount} onChange={(e) => setAmount(Number(e.target.value))} className="swala-slider" />
+          {/* MONTO */}
+          <div style={{ marginBottom: '24px' }}>
+            <label className="swala-label" style={{ display: 'block', marginBottom: '8px' }}>{mode === 'project' ? 'Monto a financiar (COP)' : 'Valor de la factura (COP)'}</label>
+            <input type="number" value={amount} min={1000000} max={500000000} step={1000000} onChange={e => setAmount(Math.max(0, Number(e.target.value)))}
+              className="swala-input" style={{ fontSize: '18px', fontWeight: 700, color: 'var(--color-petroleo)' }} />
+            <div style={{ fontSize: '12px', color: 'var(--color-gris)', marginTop: '4px' }}>{fmt.format(amount)}</div>
           </div>
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
-              <label className="swala-label">
-                {mode === 'project' ? 'Plazo estimado (días)' : 'Días para el vencimiento'}
-              </label>
-              <span style={{ fontWeight: 700, color: 'var(--color-petroleo)' }}>{days} días</span>
+
+          {/* DÍAS */}
+          {mode === 'project' ? (
+            <div>
+              <label className="swala-label" style={{ display: 'block', marginBottom: '10px' }}>Plazo de pago del cliente</label>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: '6px' }}>
+                {[30, 45, 60, 90, 120].map(d => (
+                  <button key={d} onClick={() => setDays(d)} style={{
+                    padding: '10px 4px', borderRadius: '10px', border: '1.5px solid', borderColor: days === d ? 'var(--color-lima-dark)' : '#E5E9EC',
+                    background: days === d ? 'rgba(184,217,0,0.08)' : '#FAFAFA', fontSize: '13px', fontWeight: 700, color: 'var(--color-petroleo)', cursor: 'pointer', transition: '0.2s',
+                  }}>{d}d</button>
+                ))}
+              </div>
             </div>
-            <input type="range" min="15" max="120" step="15" value={days} onChange={(e) => setDays(Number(e.target.value))} className="swala-slider" />
-          </div>
+          ) : (
+            <div>
+              <label className="swala-label" style={{ display: 'block', marginBottom: '8px' }}>Días hasta el vencimiento</label>
+              <input type="number" value={invoiceDays} min={1} max={360} onChange={e => setInvoiceDays(Math.max(1, Number(e.target.value)))} className="swala-input" placeholder="Ej: 45" />
+            </div>
+          )}
         </div>
-        
-        <div style={{
-          background: 'var(--color-petroleo)', padding: '40px', borderRadius: '24px', color: '#fff',
-          display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative', overflow: 'hidden',
-        }}>
-          <Orb color="rgba(230,255,40,0.1)" size="200px" top="-20%" right="-20%" />
-          <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>
-            {mode === 'project' ? 'Recibes hoy para producir' : 'Recibes por tu factura'}
-          </p>
-          <h3 style={{ fontSize: '38px', fontFamily: 'var(--font-display)', color: 'var(--color-lima)', marginBottom: '24px' }}>{formatter.format(netAmount)}</h3>
-          <div style={{ paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: '8px' }}>
-              <span>Costo total del servicio</span>
-              <span style={{ color: '#fff' }}>{formatter.format(totalCost)}</span>
-            </div>
-          </div>
+
+        {/* ── PANEL DERECHO: RESULTADOS ───────────────────────────────── */}
+        <div style={{ background: 'var(--color-petroleo)', borderRadius: '0 32px 32px 0', padding: '48px', display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
+          <Orb color="rgba(230,255,40,0.08)" size="300px" top="-30%" right="-20%" />
+
+          {mode === 'project' ? (
+            <>
+              <p style={{ fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', marginBottom: '24px' }}>Financiación de Proyectos — Simulación orientativa</p>
+              <ResultRow label="Monto financiado" value={amount} />
+              <ResultRow label="Costo total de la operación" value={c1Cost} />
+              <ResultRow label="Lo que recibes neto" value={c1Net} highlight />
+            </>
+          ) : (
+            <>
+              <p style={{ fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', marginBottom: '24px' }}>Adelanto de Pagos — Simulación orientativa</p>
+              <ResultRow label="Valor de tu factura" value={amount} />
+              <ResultRow label="Lo que recibes hoy" value={c2Today} highlight />
+              <ResultRow label="Lo que recibes al vencimiento" value={c2AtExpiry} />
+              <ResultRow label="Costo total" value={c2Cost} />
+            </>
+          )}
+
+          <p style={{ marginTop: '20px', fontSize: '11px', color: 'rgba(255,255,255,0.35)', fontStyle: 'italic' }}>*Sujeto a evaluación de riesgo. Condiciones reales dependen de la solidez del pagador.</p>
         </div>
       </motion.div>
     </div>
@@ -381,8 +370,8 @@ const ContactForm = ({ calcContext }) => {
         <div style={{ width: '80px', height: '80px', background: 'var(--color-lima)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
           <CheckCircle2 size={40} color="var(--color-petroleo)" />
         </div>
-        <h3 style={{ fontSize: '28px', fontFamily: 'var(--font-display)', marginBottom: '16px', color: 'var(--color-petroleo)' }}>¡Solicitud Recibida!</h3>
-        <p style={{ color: 'var(--color-gris)', fontSize: '16px' }}>Un asesor de Swala Capital se pondrá en contacto contigo en menos de 48 horas.</p>
+        <h3 style={{ fontSize: '28px', fontFamily: 'var(--font-display)', marginBottom: '16px', color: 'var(--color-petroleo)' }}>¡Listo! Recibimos tu información.</h3>
+        <p style={{ color: 'var(--color-gris)', fontSize: '16px' }}>Te escribimos en menos de 48 horas hábiles al WhatsApp que nos dejaste. 🙌</p>
       </motion.div>
     );
   }
@@ -397,26 +386,33 @@ const ContactForm = ({ calcContext }) => {
         style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
       >
         <input type="hidden" name="form-name" value="contact" />
-        {/* CAMPOS DE CONTEXTO DE CALCULADORA - Invisibles para el usuario, clave para el CRM */}
+        {/* CAMPOS DE CONTEXTO DE CALCULADORA */}
         <input type="hidden" name="producto-calculado" value={calcContext?.mode || 'No especificado'} />
         <input type="hidden" name="perfil-pagador" value={calcContext?.pagador || 'No especificado'} />
-        <div className="form-group"><label className="swala-label">Nombre completo</label><input type="text" name="nombre" className="swala-input" placeholder="Tu nombre" required /></div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-          <div className="form-group"><label className="swala-label">Empresa</label><input type="text" name="empresa" className="swala-input" placeholder="Nombre taller" required /></div>
-          <div className="form-group"><label className="swala-label">Celular</label><input type="tel" name="celular" className="swala-input" placeholder="300 000 0000" required /></div>
+        
+        <div className="form-group">
+          <label className="swala-label" style={{ fontWeight: 600, color: 'var(--color-petroleo)', marginBottom: '8px', display: 'block' }}>Nombre completo</label>
+          <input type="text" name="nombre" className="swala-input" placeholder="Tu nombre" required />
         </div>
-        <div className="form-group"><label className="swala-label">Ventas Mensuales</label>
-          <select className="swala-input" name="ventas" required>
-            <option value="">Selecciona</option>
-            <option value="1-10">1M - 10M</option>
-            <option value="10-50">10M - 50M</option>
-            <option value="50-100">50M - 100M</option>
-            <option value="100+">Más de 100M</option>
+        
+        <div className="form-group">
+          <label className="swala-label" style={{ fontWeight: 600, color: 'var(--color-petroleo)', marginBottom: '8px', display: 'block' }}>WhatsApp</label>
+          <input type="tel" name="celular" className="swala-input" placeholder="300 000 0000" required />
+        </div>
+        
+        <div className="form-group">
+          <label className="swala-label" style={{ fontWeight: 600, color: 'var(--color-petroleo)', marginBottom: '8px', display: 'block' }}>¿Cuál describe mejor tu situación?</label>
+          <select className="swala-input" name="situacion" required>
+            <option value="">Selecciona tu situación</option>
+            <option value="Contrato sin capital">Tengo un contrato pero no el capital para ejecutarlo</option>
+            <option value="Orden de compra sin capital">Tengo una orden de compra pero necesito capital para arrancar</option>
+            <option value="Factura por cobrar">Ya entregué y facturé, pero necesito liquidez ahora</option>
+            <option value="Saber más">Quiero saber más sobre Swala</option>
           </select>
         </div>
-        <div className="form-group"><label className="swala-label">¿Para qué necesitas el capital?</label><textarea className="swala-input" name="mensaje" rows="3" placeholder="Ej: Comprar tela para un pedido..." required></textarea></div>
-        <button type="submit" className="btn-primary" disabled={status === 'sending'} style={{ width: '100%', justifyContent: 'center' }}>
-          {status === 'sending' ? 'Procesando...' : 'Enviar mi solicitud'}
+        
+        <button type="submit" className="btn-primary" disabled={status === 'sending'} style={{ width: '100%', justifyContent: 'center', background: 'var(--color-lima)', color: 'var(--color-petroleo)', fontWeight: 'bold', border: 'none', padding: '16px', borderRadius: '12px', fontSize: '16px', cursor: 'pointer', transition: '0.3s' }}>
+          {status === 'sending' ? 'Procesando...' : 'Quiero que me contacten'}
         </button>
       </form>
     </div>
