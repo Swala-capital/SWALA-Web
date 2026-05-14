@@ -205,11 +205,21 @@ const SwalaCalculator = () => {
   const [mode, setMode] = useState('project'); // 'project' or 'invoice'
   const [amount, setAmount] = useState(10000000);
   const [days, setDays] = useState(30);
+  const [payerType, setPayerType] = useState('public'); // 'public', 'large', 'medium'
 
-  // Lógica Base (Se volverá dinámica en la Fase 2)
-  const monthlyRate = 0.025;
-  const platformFee = 0.01;
-  const totalCost = (amount * monthlyRate * (days / 30)) + (amount * platformFee);
+  // Tasas dinámicas por perfil de pagador
+  const rates = {
+    public: 0.018, // 1.8% mensual
+    large: 0.020,  // 2.0% mensual
+    medium: 0.022  // 2.2% mensual
+  };
+
+  const monthlyRate = rates[payerType] || 0.025;
+  const platformFee = 0.01; // 1.0% comisión fija
+  
+  const financialCost = amount * monthlyRate * (days / 30);
+  const serviceFee = amount * platformFee;
+  const totalCost = financialCost + serviceFee;
   const netAmount = amount - totalCost;
 
   const formatter = new Intl.NumberFormat('es-CO', {
@@ -263,7 +273,35 @@ const SwalaCalculator = () => {
           display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '60px',
         }}
       >
-        <div>
+        <div className="calc-inputs">
+          {/* NUEVO SELECTOR DE PAGADOR */}
+          <div style={{ marginBottom: '32px' }}>
+            <label className="swala-label" style={{ marginBottom: '16px', display: 'block' }}>¿Quién es tu cliente pagador?</label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
+              {[
+                { id: 'public', label: 'Entidad Pública', rate: '1.8%' },
+                { id: 'large', label: 'Gran Privada', rate: '2.0%' },
+                { id: 'medium', label: 'Mediana', rate: '2.2%' }
+              ].map((type) => (
+                <button
+                  key={type.id}
+                  onClick={() => setPayerType(type.id)}
+                  style={{
+                    padding: '12px 8px', borderRadius: '10px', fontSize: '12px', fontWeight: 600,
+                    border: '1px solid', 
+                    borderColor: payerType === type.id ? 'var(--color-lima-dark)' : '#E5E9EC',
+                    background: payerType === type.id ? 'rgba(230,255,40,0.05)' : '#fff',
+                    color: 'var(--color-petroleo)',
+                    cursor: 'pointer', transition: '0.2s', textAlign: 'center'
+                  }}
+                >
+                  <div style={{ marginBottom: '4px' }}>{type.label}</div>
+                  <div style={{ fontSize: '10px', color: 'var(--color-gris)', fontWeight: 400 }}>Tasa {type.rate}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div style={{ marginBottom: '40px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
               <label className="swala-label">
