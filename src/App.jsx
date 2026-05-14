@@ -24,6 +24,51 @@ const AnimatedCounter = ({ value, formatter }) => {
   return <span ref={ref}>{display}</span>;
 };
 
+
+/* ─── WORLD CLASS BACKGROUND COMPONENTS ─── */
+const MouseSpotlight = () => {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [mouseX, mouseY]);
+
+  return (
+    <motion.div
+      style={{
+        position: 'fixed',
+        top: 0, left: 0, width: '100vw', height: '100vh',
+        pointerEvents: 'none', zIndex: 1,
+        background: useTransform(
+          [mouseX, mouseY],
+          ([x, y]) => `radial-gradient(800px circle at ${x}px ${y}px, rgba(230,255,40,0.04), transparent 50%)`
+        )
+      }}
+    />
+  );
+};
+
+const BreathingMesh = () => (
+  <motion.div
+    animate={{ 
+      backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
+      opacity: [0.3, 0.5, 0.3]
+    }}
+    transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+    style={{
+      position: 'absolute', inset: 0, zIndex: 0,
+      background: 'radial-gradient(circle at center, var(--color-petroleo-dark) 0%, transparent 100%), radial-gradient(circle at 80% 20%, rgba(230,255,40,0.05) 0%, transparent 50%)',
+      backgroundSize: '200% 200%',
+    }}
+  />
+);
+
 /* ─── COMPONENTE POPUP DE SALIDA ─── */
 const ExitIntentPopup = () => {
   const [show, setShow] = useState(false);
@@ -489,6 +534,7 @@ const App = () => {
 
   return (
     <div className="app-container">
+      <MouseSpotlight />
       <ExitIntentPopup />
       
       <nav style={{
@@ -502,8 +548,8 @@ const App = () => {
         </div>
       </nav>
 
-      <section className="hero" id="inicio" style={{ background: 'var(--color-petroleo)', minHeight: '100vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden', paddingTop: '80px' }}>
-        <Orb color="rgba(230,255,40,0.1)" size="700px" top="-15%" right="-10%" />
+      <section className="hero bg-grid-dark" id="inicio" style={{ background: 'var(--color-petroleo)', minHeight: '100vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden', paddingTop: '80px' }}>
+        <BreathingMesh />
         <div className="container" style={{ position: 'relative', zIndex: 2 }}>
           <motion.div variants={fadeUp} initial="hidden" animate="visible" style={{ y: heroY, opacity: heroOpacity }}>
             <h1 className="hero-h1">¿El dinero te <span className="accent">frena</span><br />aunque tengas pedidos?</h1>
@@ -517,7 +563,7 @@ const App = () => {
 
       <SectionConnector from="var(--color-petroleo)" to="var(--color-blanco-hueso)" />
 
-      <section id="situaciones" style={{ background: 'var(--color-blanco-hueso)', padding: '100px 0' }}>
+      <section id="situaciones" className="bg-grid-light" style={{ background: 'var(--color-blanco-hueso)', padding: '100px 0' }}>
         <div className="container">
           <h2 className="sec-heading" style={{ textAlign: 'center', marginBottom: '72px' }}>Sabemos lo que <span style={{ color: 'var(--color-lima-dark)' }}>vives</span></h2>
           <motion.div className="grid-3" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.1 }}>
@@ -530,7 +576,7 @@ const App = () => {
 
       <SectionConnector from="var(--color-blanco-hueso)" to="var(--color-petroleo)" />
 
-      <section id="proceso" style={{ background: 'var(--color-petroleo)', padding: '100px 0', color: '#fff' }}>
+      <section id="proceso" className="bg-grid-dark" style={{ background: 'var(--color-petroleo)', padding: '100px 0', color: '#fff' }}>
         <div className="container">
           <h2 className="sec-heading" style={{ color: '#fff', textAlign: 'center', marginBottom: '80px' }}>En <span style={{ color: 'var(--color-lima)' }}>3 simples pasos</span></h2>
           <motion.div className="grid-3" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.1 }}>
@@ -543,14 +589,14 @@ const App = () => {
 
       <SectionConnector from="var(--color-petroleo)" to="var(--color-blanco-hueso)" />
 
-      <section id="calculadora" style={{ background: 'var(--color-blanco-hueso)', padding: '100px 0' }}>
+      <section id="calculadora" className="bg-grid-light" style={{ background: 'var(--color-blanco-hueso)', padding: '100px 0' }}>
         <div className="container">
           <h2 className="sec-heading" style={{ textAlign: 'center', marginBottom: '60px' }}>Calcula tu <span style={{ color: 'var(--color-lima-dark)' }}>liquidez</span></h2>
           <SwalaCalculator onCalcChange={setCalcContext} />
         </div>
       </section>
 
-      <section id="formulario" style={{ background: 'var(--color-blanco-hueso)', padding: '100px 0 140px' }}>
+      <section id="formulario" className="bg-grid-light" style={{ background: 'var(--color-blanco-hueso)', padding: '100px 0 140px' }}>
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '80px', alignItems: 'center' }}>
             <div>
