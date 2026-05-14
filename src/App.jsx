@@ -202,9 +202,11 @@ const StepCard = ({ number, icon, title, desc, delay }) => (
 );
 
 const SwalaCalculator = () => {
+  const [mode, setMode] = useState('project'); // 'project' or 'invoice'
   const [amount, setAmount] = useState(10000000);
   const [days, setDays] = useState(30);
 
+  // Lógica Base (Se volverá dinámica en la Fase 2)
   const monthlyRate = 0.025;
   const platformFee = 0.01;
   const totalCost = (amount * monthlyRate * (days / 30)) + (amount * platformFee);
@@ -215,45 +217,89 @@ const SwalaCalculator = () => {
   });
 
   return (
-    <motion.div 
-      variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
-      style={{
-        maxWidth: '900px', margin: '0 auto', background: '#fff', padding: '48px',
-        borderRadius: '32px', boxShadow: '0 40px 100px rgba(8,69,86,0.06)',
-        display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '60px',
-      }}
-    >
-      <div>
-        <div style={{ marginBottom: '40px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
-            <label className="swala-label">Monto de la operación</label>
-            <span style={{ fontWeight: 700, color: 'var(--color-petroleo)' }}>{formatter.format(amount)}</span>
-          </div>
-          <input type="range" min="1000000" max="200000000" step="1000000" value={amount} onChange={(e) => setAmount(Number(e.target.value))} className="swala-slider" />
-        </div>
-        <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
-            <label className="swala-label">Plazo estimado (días)</label>
-            <span style={{ fontWeight: 700, color: 'var(--color-petroleo)' }}>{days} días</span>
-          </div>
-          <input type="range" min="15" max="120" step="15" value={days} onChange={(e) => setDays(Number(e.target.value))} className="swala-slider" />
-        </div>
-      </div>
+    <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+      {/* SELECTOR DE MODO (TABS) */}
       <div style={{
-        background: 'var(--color-petroleo)', padding: '40px', borderRadius: '24px', color: '#fff',
-        display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative', overflow: 'hidden',
+        display: 'flex',
+        background: 'rgba(8,69,86,0.05)',
+        padding: '6px',
+        borderRadius: '16px',
+        marginBottom: '32px',
+        gap: '4px'
       }}>
-        <Orb color="rgba(230,255,40,0.1)" size="200px" top="-20%" right="-20%" />
-        <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>Recibes hoy aprox.</p>
-        <h3 style={{ fontSize: '38px', fontFamily: 'var(--font-display)', color: 'var(--color-lima)', marginBottom: '24px' }}>{formatter.format(netAmount)}</h3>
-        <div style={{ paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: '8px' }}>
-            <span>Costo total del servicio</span>
-            <span>{formatter.format(totalCost)}</span>
+        <button 
+          onClick={() => setMode('project')}
+          style={{
+            flex: 1, padding: '12px', borderRadius: '12px', border: 'none', cursor: 'pointer',
+            fontFamily: 'var(--font-ui)', fontWeight: 600, fontSize: '14px',
+            background: mode === 'project' ? 'var(--color-petroleo)' : 'transparent',
+            color: mode === 'project' ? 'var(--color-lima)' : 'var(--color-petroleo)',
+            transition: '0.3s'
+          }}
+        >
+          Financiación de Proyectos
+        </button>
+        <button 
+          onClick={() => setMode('invoice')}
+          style={{
+            flex: 1, padding: '12px', borderRadius: '12px', border: 'none', cursor: 'pointer',
+            fontFamily: 'var(--font-ui)', fontWeight: 600, fontSize: '14px',
+            background: mode === 'invoice' ? 'var(--color-petroleo)' : 'transparent',
+            color: mode === 'invoice' ? 'var(--color-lima)' : 'var(--color-petroleo)',
+            transition: '0.3s'
+          }}
+        >
+          Adelanto de Facturas
+        </button>
+      </div>
+
+      <motion.div 
+        key={mode}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        style={{
+          background: '#fff', padding: '48px',
+          borderRadius: '32px', boxShadow: '0 40px 100px rgba(8,69,86,0.06)',
+          display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '60px',
+        }}
+      >
+        <div>
+          <div style={{ marginBottom: '40px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
+              <label className="swala-label">
+                {mode === 'project' ? 'Monto del contrato / orden' : 'Monto de la factura'}
+              </label>
+              <span style={{ fontWeight: 700, color: 'var(--color-petroleo)' }}>{formatter.format(amount)}</span>
+            </div>
+            <input type="range" min="1000000" max="200000000" step="1000000" value={amount} onChange={(e) => setAmount(Number(e.target.value))} className="swala-slider" />
+          </div>
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
+              <label className="swala-label">Plazo estimado (días)</label>
+              <span style={{ fontWeight: 700, color: 'var(--color-petroleo)' }}>{days} días</span>
+            </div>
+            <input type="range" min="15" max="120" step="15" value={days} onChange={(e) => setDays(Number(e.target.value))} className="swala-slider" />
           </div>
         </div>
-      </div>
-    </motion.div>
+        
+        <div style={{
+          background: 'var(--color-petroleo)', padding: '40px', borderRadius: '24px', color: '#fff',
+          display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative', overflow: 'hidden',
+        }}>
+          <Orb color="rgba(230,255,40,0.1)" size="200px" top="-20%" right="-20%" />
+          <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>
+            {mode === 'project' ? 'Recibes hoy para producir' : 'Recibes por tu factura'}
+          </p>
+          <h3 style={{ fontSize: '38px', fontFamily: 'var(--font-display)', color: 'var(--color-lima)', marginBottom: '24px' }}>{formatter.format(netAmount)}</h3>
+          <div style={{ paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: '8px' }}>
+              <span>Costo total del servicio</span>
+              <span style={{ color: '#fff' }}>{formatter.format(totalCost)}</span>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </div>
   );
 };
 
