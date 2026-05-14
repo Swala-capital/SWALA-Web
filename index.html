@@ -49,6 +49,14 @@
     </script>
   </head>
   <body>
+    <!-- FORMULARIO OCULTO PARA NETLIFY BOTS (Requisito para React) -->
+    <form name="contact" netlify netlify-honeypot="bot-field" hidden>
+      <input type="text" name="nombre" />
+      <input type="tel" name="celular" />
+      <select name="situacion"></select>
+      <input type="text" name="producto-calculado" />
+      <input type="text" name="perfil-pagador" />
+    </form>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
