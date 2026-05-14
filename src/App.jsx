@@ -262,7 +262,22 @@ const ContactForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus('sending');
-    setTimeout(() => setStatus('success'), 1500);
+
+    const formData = new FormData(e.target);
+    const data = new URLSearchParams(formData).toString();
+
+    try {
+      await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: data,
+      });
+      setStatus('success');
+    } catch (error) {
+      console.error(error);
+      alert("Hubo un error al enviar. Por favor intenta de nuevo.");
+      setStatus('idle');
+    }
   };
 
   if (status === 'success') {
@@ -279,14 +294,21 @@ const ContactForm = () => {
 
   return (
     <div style={{ background: '#fff', padding: '48px', borderRadius: '32px', boxShadow: '0 40px 100px rgba(8,69,86,0.06)' }}>
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        <div className="form-group"><label className="swala-label">Nombre completo</label><input type="text" className="swala-input" placeholder="Tu nombre" required /></div>
+      <form 
+        name="contact" 
+        method="POST" 
+        data-netlify="true" 
+        onSubmit={handleSubmit} 
+        style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
+      >
+        <input type="hidden" name="form-name" value="contact" />
+        <div className="form-group"><label className="swala-label">Nombre completo</label><input type="text" name="nombre" className="swala-input" placeholder="Tu nombre" required /></div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-          <div className="form-group"><label className="swala-label">Empresa</label><input type="text" className="swala-input" placeholder="Nombre taller" required /></div>
-          <div className="form-group"><label className="swala-label">Celular</label><input type="tel" className="swala-input" placeholder="300 000 0000" required /></div>
+          <div className="form-group"><label className="swala-label">Empresa</label><input type="text" name="empresa" className="swala-input" placeholder="Nombre taller" required /></div>
+          <div className="form-group"><label className="swala-label">Celular</label><input type="tel" name="celular" className="swala-input" placeholder="300 000 0000" required /></div>
         </div>
         <div className="form-group"><label className="swala-label">Ventas Mensuales</label>
-          <select className="swala-input" required>
+          <select className="swala-input" name="ventas" required>
             <option value="">Selecciona</option>
             <option value="1-10">1M - 10M</option>
             <option value="10-50">10M - 50M</option>
@@ -294,7 +316,7 @@ const ContactForm = () => {
             <option value="100+">Más de 100M</option>
           </select>
         </div>
-        <div className="form-group"><label className="swala-label">¿Para qué necesitas el capital?</label><textarea className="swala-input" rows="3" placeholder="Ej: Comprar tela para un pedido..." required></textarea></div>
+        <div className="form-group"><label className="swala-label">¿Para qué necesitas el capital?</label><textarea className="swala-input" name="mensaje" rows="3" placeholder="Ej: Comprar tela para un pedido..." required></textarea></div>
         <button type="submit" className="btn-primary" disabled={status === 'sending'} style={{ width: '100%', justifyContent: 'center' }}>
           {status === 'sending' ? 'Procesando...' : 'Enviar mi solicitud'}
         </button>
