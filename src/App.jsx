@@ -233,9 +233,9 @@ const SwalaCalculator = ({ onCalcChange }) => {
   const c2AtExpiry = amount * (1 - advancePct[payerType]);
 
   const payerOptions = [
-    { id: 'public', label: 'Entidad Pública',       rate: '1.8%', adv: '87%' },
-    { id: 'large',  label: 'Gran Empresa Privada',   rate: '2.0%', adv: '85%' },
-    { id: 'medium', label: 'Empresa Mediana',        rate: '2.2%', adv: '82%' },
+    { id: 'public', label: 'Entidad Pública', desc: 'Alcaldías, Ministerios...', adv: '87%' },
+    { id: 'large',  label: 'Gran Empresa', desc: 'Multinacionales, grandes superficies', adv: '85%' },
+    { id: 'medium', label: 'Empresa Mediana', desc: 'Empresas locales consolidadas', adv: '82%' },
   ];
 
   const ResultRow = ({ label, value, highlight }) => (
@@ -278,7 +278,7 @@ const SwalaCalculator = ({ onCalcChange }) => {
                   background: payerType === p.id ? 'rgba(184,217,0,0.08)' : '#FAFAFA', cursor: 'pointer', transition: '0.2s', textAlign: 'center',
                 }}>
                   <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-petroleo)', marginBottom: '3px' }}>{p.label}</div>
-                  <div style={{ fontSize: '10px', color: 'var(--color-gris)' }}>Tasa {p.rate}{mode === 'invoice' ? ` · Anticipo ${p.adv}` : ''}</div>
+                  <div style={{ fontSize: '10px', color: 'var(--color-gris)' }}>{p.desc}{mode === 'invoice' ? ` · Anticipo ${p.adv}` : ''}</div>
                 </button>
               ))}
             </div>
