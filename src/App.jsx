@@ -274,9 +274,11 @@ const SwalaCalculator = () => {
         }}
       >
         <div className="calc-inputs">
-          {/* NUEVO SELECTOR DE PAGADOR */}
+          {/* SELECTOR DE PAGADOR */}
           <div style={{ marginBottom: '32px' }}>
-            <label className="swala-label" style={{ marginBottom: '16px', display: 'block' }}>¿Quién es tu cliente pagador?</label>
+            <label className="swala-label" style={{ marginBottom: '16px', display: 'block' }}>
+              {mode === 'project' ? '¿Quién es tu cliente pagador?' : '¿Quién debe pagar la factura?'}
+            </label>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
               {[
                 { id: 'public', label: 'Entidad Pública', rate: '1.8%' },
@@ -313,7 +315,9 @@ const SwalaCalculator = () => {
           </div>
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
-              <label className="swala-label">Plazo estimado (días)</label>
+              <label className="swala-label">
+                {mode === 'project' ? 'Plazo estimado (días)' : 'Días para el vencimiento'}
+              </label>
               <span style={{ fontWeight: 700, color: 'var(--color-petroleo)' }}>{days} días</span>
             </div>
             <input type="range" min="15" max="120" step="15" value={days} onChange={(e) => setDays(Number(e.target.value))} className="swala-slider" />
