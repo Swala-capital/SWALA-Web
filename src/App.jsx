@@ -1,6 +1,28 @@
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValue, useInView } from 'framer-motion';
 import { FileText, Package, Clock, ChevronRight, MessageCircle, Zap, DollarSign, X, CheckCircle2 } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
+
+/* ─── ANIMATED COUNTER ─── */
+const AnimatedCounter = ({ value, formatter }) => {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: false });
+  const motionValue = useMotionValue(0);
+  const spring = useSpring(motionValue, { stiffness: 80, damping: 20 });
+  const [display, setDisplay] = useState(formatter ? formatter(0) : '0');
+
+  useEffect(() => {
+    if (inView) motionValue.set(value);
+  }, [value, inView, motionValue]);
+
+  useEffect(() => {
+    const unsub = spring.on('change', (latest) => {
+      setDisplay(formatter ? formatter(Math.round(latest)) : Math.round(latest).toString());
+    });
+    return unsub;
+  }, [spring, formatter]);
+
+  return <span ref={ref}>{display}</span>;
+};
 
 /* ─── COMPONENTE POPUP DE SALIDA ─── */
 const ExitIntentPopup = () => {
@@ -88,12 +110,16 @@ const ExitIntentPopup = () => {
 };
 
 /* ─── ANIMACIONES GLOBALES ─── */
+const staggerContainer = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
+};
+
 const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 50, filter: 'blur(4px)' },
   visible: (delay = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] },
+    opacity: 1, y: 0, filter: 'blur(0px)',
+    transition: { duration: 0.8, delay, ease: [0.16, 1, 0.3, 1] },
   }),
 };
 
@@ -108,15 +134,15 @@ const fadeIn = {
 /* ─── COMPONENTES DE APOYO ─── */
 const Orb = ({ color, size, top, left, right, bottom, delay = 0, duration = 20, dx = 80, dy = 60 }) => (
   <motion.div
-    animate={{ x: [0, dx, 0], y: [0, dy, 0], scale: [1, 1.15, 1] }}
+    animate={{ x: [0, dx, 0], y: [0, dy, 0], scale: [1, 1.2, 1], opacity: [0.6, 1, 0.6] }}
     transition={{ duration, repeat: Infinity, ease: 'easeInOut', delay }}
     style={{
       position: 'absolute',
       width: size, height: size,
       top, left, right, bottom,
       borderRadius: '50%',
-      background: `radial-gradient(circle, ${color} 0%, transparent 70%)`,
-      filter: 'blur(80px)',
+      background: `radial-gradient(circle, ${color} 0%, transparent 65%)`,
+      filter: 'blur(70px)',
       pointerEvents: 'none',
     }}
   />
@@ -135,27 +161,43 @@ const SituationCard = ({ icon, title, desc, delay }) => (
   <motion.div
     variants={fadeUp}
     custom={delay}
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true, amount: 0.2 }}
-    whileHover={{ scale: 1.02, y: -4, transition: { duration: 0.2 } }} whileTap={{ scale: 0.98 }}
+    
+    whileHover={{
+      scale: 1.03, y: -8,
+      boxShadow: '0 30px 60px rgba(8,69,86,0.13)',
+      borderColor: 'var(--color-lima)',
+      transition: { duration: 0.25, ease: 'easeOut' }
+    }}
+    whileTap={{ scale: 0.97 }}
     style={{
       background: '#fff',
       padding: '48px',
-      borderRadius: '24px',
+      borderRadius: '20px',
       border: '1px solid rgba(8,69,86,0.06)',
-      boxShadow: '0 10px 40px rgba(8,69,86,0.05)',
-      transition: 'border-color 0.4s, box-shadow 0.4s',
+      boxShadow: '0 8px 30px rgba(8,69,86,0.06)',
       cursor: 'default',
+      position: 'relative',
+      overflow: 'hidden',
     }}
-    className="sit-card"
   >
-    <div style={{ marginBottom: '28px', color: 'var(--color-petroleo)' }}>{icon}</div>
+    <motion.div
+      whileHover={{ rotate: 8, scale: 1.15, color: 'var(--color-lima-dark)' }}
+      transition={{ duration: 0.3 }}
+      style={{ marginBottom: '28px', color: 'var(--color-petroleo)', display: 'inline-block' }}
+    >{icon}</motion.div>
     <h3 style={{
       fontFamily: 'var(--font-display)', fontSize: '22px',
       color: 'var(--color-petroleo)', marginBottom: '16px', lineHeight: 1.3,
     }}>{title}</h3>
     <p style={{ color: 'var(--color-gris)', fontSize: '16px', lineHeight: 1.7 }}>{desc}</p>
+    {/* Borde Lima sutil en la esquina */}
+    <div style={{
+      position: 'absolute', bottom: 0, left: 0,
+      width: '4px', height: '100%',
+      background: 'var(--color-lima)',
+      opacity: 0,
+      transition: 'opacity 0.3s',
+    }} />
   </motion.div>
 );
 
@@ -163,35 +205,47 @@ const StepCard = ({ number, icon, title, desc, delay }) => (
   <motion.div
     variants={fadeUp}
     custom={delay}
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true, amount: 0.2 }}
-    whileHover={{ scale: 1.02, y: -4, transition: { duration: 0.2 } }} whileTap={{ scale: 0.98 }}
+    
+    whileHover={{
+      scale: 1.03, y: -8,
+      background: 'rgba(255,255,255,0.07)',
+      borderColor: 'rgba(230,255,40,0.3)',
+      boxShadow: '0 0 40px rgba(230,255,40,0.06)',
+      transition: { duration: 0.25 }
+    }}
+    whileTap={{ scale: 0.97 }}
     style={{
       position: 'relative',
       padding: '40px',
       background: 'rgba(255,255,255,0.04)',
-      borderRadius: '24px',
-      border: '1px solid rgba(255,255,255,0.07)',
+      borderRadius: '20px',
+      border: '1px solid rgba(255,255,255,0.08)',
       overflow: 'hidden',
       cursor: 'default',
+      backdropFilter: 'blur(4px)',
     }}
-    className="step-card"
   >
-    <div style={{
-      position: 'absolute', top: '16px', right: '24px',
-      fontFamily: 'var(--font-display)', fontSize: '80px',
-      color: 'rgba(230,255,40,0.07)', lineHeight: 1, userSelect: 'none',
-    }}>{number}</div>
+    <motion.div
+      style={{
+        position: 'absolute', top: '16px', right: '24px',
+        fontFamily: 'var(--font-display)', fontSize: '80px',
+        color: 'rgba(230,255,40,0.07)', lineHeight: 1, userSelect: 'none',
+      }}
+      whileHover={{ color: 'rgba(230,255,40,0.15)' }}
+    >{number}</motion.div>
 
-    <div style={{
-      width: '52px', height: '52px',
-      background: 'rgba(230,255,40,0.1)',
-      borderRadius: '14px',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      marginBottom: '28px',
-      color: 'var(--color-lima)',
-    }}>{icon}</div>
+    <motion.div
+      whileHover={{ rotate: 12, scale: 1.2 }}
+      transition={{ duration: 0.3 }}
+      style={{
+        width: '52px', height: '52px',
+        background: 'rgba(230,255,40,0.12)',
+        borderRadius: '14px',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        marginBottom: '28px',
+        color: 'var(--color-lima)',
+      }}
+    >{icon}</motion.div>
 
     <h3 style={{
       fontFamily: 'var(--font-display)', fontSize: '22px',
@@ -242,7 +296,7 @@ const SwalaCalculator = ({ onCalcChange }) => {
     <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.07)', alignItems: 'baseline' }}>
       <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)' }}>{label}</span>
       <span style={{ fontFamily: 'var(--font-display)', fontSize: highlight ? '26px' : '16px', color: highlight ? 'var(--color-lima)' : '#fff', fontWeight: 700 }}>
-        {fmt.format(value)}
+        <AnimatedCounter value={value} formatter={v => fmt.format(v)} />
       </span>
     </div>
   );
@@ -422,6 +476,9 @@ const ContactForm = ({ calcContext }) => {
 /* ─── APP PRINCIPAL ─── */
 const App = () => {
   const [scrolled, setScrolled] = useState(false);
+  const { scrollY } = useScroll();
+  const heroY = useTransform(scrollY, [0, 600], [0, 200]);
+  const heroOpacity = useTransform(scrollY, [0, 400], [1, 0]);
   const [calcContext, setCalcContext] = useState({ mode: 'Financiación de Proyectos', pagador: 'Entidad Pública' });
 
   useEffect(() => {
@@ -448,7 +505,7 @@ const App = () => {
       <section className="hero" id="inicio" style={{ background: 'var(--color-petroleo)', minHeight: '100vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden', paddingTop: '80px' }}>
         <Orb color="rgba(230,255,40,0.1)" size="700px" top="-15%" right="-10%" />
         <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-          <motion.div variants={fadeUp} initial="hidden" animate="visible">
+          <motion.div variants={fadeUp} initial="hidden" animate="visible" style={{ y: heroY, opacity: heroOpacity }}>
             <h1 className="hero-h1">¿El dinero te <span className="accent">frena</span><br />aunque tengas pedidos?</h1>
             <p className="hero-sub">Conectamos confeccionistas colombianos con el capital que necesitan. Sin hipotecas ni historial crediticio.</p>
             <div className="hero-actions-container">
@@ -463,11 +520,11 @@ const App = () => {
       <section id="situaciones" style={{ background: 'var(--color-blanco-hueso)', padding: '100px 0' }}>
         <div className="container">
           <h2 className="sec-heading" style={{ textAlign: 'center', marginBottom: '72px' }}>Sabemos lo que <span style={{ color: 'var(--color-lima-dark)' }}>vives</span></h2>
-          <div className="grid-3">
+          <motion.div className="grid-3" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.1 }}>
             <SituationCard icon={<FileText size={32} />} title="Contratos sin capital" desc="Tienes el negocio pero te falta el impulso para ejecutarlo." delay={0.1} />
             <SituationCard icon={<Package size={32} />} title="Órdenes por arrancar" desc="La materia prima no espera. Te habilitamos el flujo hoy." delay={0.2} />
             <SituationCard icon={<Clock size={32} />} title="Facturas por cobrar" desc="Adelanta el pago de tus facturas y sigue produciendo." delay={0.3} />
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -476,11 +533,11 @@ const App = () => {
       <section id="proceso" style={{ background: 'var(--color-petroleo)', padding: '100px 0', color: '#fff' }}>
         <div className="container">
           <h2 className="sec-heading" style={{ color: '#fff', textAlign: 'center', marginBottom: '80px' }}>En <span style={{ color: 'var(--color-lima)' }}>3 simples pasos</span></h2>
-          <div className="grid-3">
+          <motion.div className="grid-3" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.1 }}>
             <StepCard number="01" icon={<MessageCircle size={24} />} title="Hablemos" desc="Cuéntanos tus pedidos y necesidades actuales." delay={0.1} />
             <StepCard number="02" icon={<Zap size={24} />} title="Evaluación" desc="Análisis ágil en menos de 48 horas." delay={0.2} />
             <StepCard number="03" icon={<DollarSign size={24} />} title="Recibe" desc="El capital llega directo a tu producción." delay={0.3} />
-          </div>
+          </motion.div>
         </div>
       </section>
 
