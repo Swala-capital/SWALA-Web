@@ -1,19 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
-
 :root {
   --color-petroleo: #084556;
   --color-petroleo-dark: #052d38;
   --color-lima: #E6FF28;
-  --color-lima-dark: #B8D900;
+  --color-lima-dark: #C8E600; /* Update to v3.0 specification */
   --color-blanco-hueso: #F9F7F2;
   --color-gris: #898A8D;
-  --color-dark: #0A1628;
+  --color-dark: #084556; /* Aligned to petroleo */
   
-  --font-display: 'DM Serif Display', serif;
-  --font-ui: 'Plus Jakarta Sans', sans-serif;
+  --font-display: Georgia, serif;
+  --font-ui: Arial, sans-serif;
   
-  --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  --radius: 24px;
+  --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --radius: 12px; /* Sharper industrial look */
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }

@@ -138,7 +138,7 @@ const SituationCard = ({ icon, title, desc, delay }) => (
     initial="hidden"
     whileInView="visible"
     viewport={{ once: true, amount: 0.2 }}
-    whileHover={{ y: -10, transition: { duration: 0.3 } }}
+    whileHover={{ scale: 1.02, y: -4, transition: { duration: 0.2 } }} whileTap={{ scale: 0.98 }}
     style={{
       background: '#fff',
       padding: '48px',
@@ -166,7 +166,7 @@ const StepCard = ({ number, icon, title, desc, delay }) => (
     initial="hidden"
     whileInView="visible"
     viewport={{ once: true, amount: 0.2 }}
-    whileHover={{ y: -8, transition: { duration: 0.3 } }}
+    whileHover={{ scale: 1.02, y: -4, transition: { duration: 0.2 } }} whileTap={{ scale: 0.98 }}
     style={{
       position: 'relative',
       padding: '40px',
@@ -253,16 +253,16 @@ const SwalaCalculator = ({ onCalcChange }) => {
       {/* ── TABS ──────────────────────────────────────────────────────── */}
       <div style={{ display: 'flex', background: 'rgba(8,69,86,0.06)', padding: '6px', borderRadius: '16px', marginBottom: '32px', gap: '4px' }}>
         {[{ id: 'project', label: 'Financiación de Proyectos' }, { id: 'invoice', label: 'Adelanto de Pagos Pendientes' }].map(t => (
-          <button key={t.id} onClick={() => setMode(t.id)} style={{
+          <motion.button key={t.id} onClick={() => setMode(t.id)} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} style={{
             flex: 1, padding: '12px 16px', borderRadius: '12px', border: 'none', cursor: 'pointer',
             fontFamily: 'var(--font-ui)', fontWeight: 600, fontSize: '14px', transition: '0.3s',
             background: mode === t.id ? 'var(--color-petroleo)' : 'transparent',
             color: mode === t.id ? 'var(--color-lima)' : 'var(--color-petroleo)',
-          }}>{t.label}</button>
+          }}>{t.label}</motion.button>
         ))}
       </div>
 
-      <motion.div key={mode} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+      <motion.div key={mode} layout initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.4, type: "spring" }}
         style={{ background: '#fff', borderRadius: '32px', boxShadow: '0 40px 100px rgba(8,69,86,0.07)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '0' }}>
 
         {/* ── PANEL IZQUIERDO: INPUTS ─────────────────────────────────── */}
@@ -273,13 +273,13 @@ const SwalaCalculator = ({ onCalcChange }) => {
             <label className="swala-label" style={{ display: 'block', marginBottom: '12px' }}>¿Quién te paga?</label>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px' }}>
               {payerOptions.map(p => (
-                <button key={p.id} onClick={() => setPayerType(p.id)} style={{
+                <motion.button key={p.id} onClick={() => setPayerType(p.id)} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} style={{
                   padding: '10px 6px', borderRadius: '10px', border: '1.5px solid', borderColor: payerType === p.id ? 'var(--color-lima-dark)' : '#E5E9EC',
                   background: payerType === p.id ? 'rgba(184,217,0,0.08)' : '#FAFAFA', cursor: 'pointer', transition: '0.2s', textAlign: 'center',
                 }}>
                   <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-petroleo)', marginBottom: '3px' }}>{p.label}</div>
                   <div style={{ fontSize: '10px', color: 'var(--color-gris)' }}>{p.desc}{mode === 'invoice' ? ` · Anticipo ${p.adv}` : ''}</div>
-                </button>
+                </motion.button>
               ))}
             </div>
           </div>
@@ -288,7 +288,7 @@ const SwalaCalculator = ({ onCalcChange }) => {
           <div style={{ marginBottom: '24px' }}>
             <label className="swala-label" style={{ display: 'block', marginBottom: '8px' }}>{mode === 'project' ? 'Monto a financiar (COP)' : 'Valor de la factura (COP)'}</label>
             <input type="number" value={amount} min={1000000} max={500000000} step={1000000} onChange={e => setAmount(Math.max(0, Number(e.target.value)))}
-              className="swala-input" style={{ fontSize: '18px', fontWeight: 700, color: 'var(--color-petroleo)' }} />
+              className="swala-input" as={motion.input} whileFocus={{ scale: 1.01, borderColor: "var(--color-lima-dark)" }} transition={{ duration: 0.2 }} style={{ fontSize: '18px', fontWeight: 700, color: 'var(--color-petroleo)' }} />
             <div style={{ fontSize: '12px', color: 'var(--color-gris)', marginTop: '4px' }}>{fmt.format(amount)}</div>
           </div>
 
@@ -298,17 +298,17 @@ const SwalaCalculator = ({ onCalcChange }) => {
               <label className="swala-label" style={{ display: 'block', marginBottom: '10px' }}>Plazo de pago del cliente</label>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: '6px' }}>
                 {[30, 45, 60, 90, 120].map(d => (
-                  <button key={d} onClick={() => setDays(d)} style={{
+                  <motion.button key={d} onClick={() => setDays(d)} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} style={{
                     padding: '10px 4px', borderRadius: '10px', border: '1.5px solid', borderColor: days === d ? 'var(--color-lima-dark)' : '#E5E9EC',
                     background: days === d ? 'rgba(184,217,0,0.08)' : '#FAFAFA', fontSize: '13px', fontWeight: 700, color: 'var(--color-petroleo)', cursor: 'pointer', transition: '0.2s',
-                  }}>{d}d</button>
+                  }}>{d}d</motion.button>
                 ))}
               </div>
             </div>
           ) : (
             <div>
               <label className="swala-label" style={{ display: 'block', marginBottom: '8px' }}>Días hasta el vencimiento</label>
-              <input type="number" value={invoiceDays} min={1} max={360} onChange={e => setInvoiceDays(Math.max(1, Number(e.target.value)))} className="swala-input" placeholder="Ej: 45" />
+              <motion.input type="number" value={invoiceDays} min={1} max={360} onChange={e => setInvoiceDays(Math.max(1, Number(e.target.value)))} className="swala-input" whileFocus={{ scale: 1.01, borderColor: "var(--color-lima-dark)" }} transition={{ duration: 0.2 }} placeholder="Ej: 45" />
             </div>
           )}
         </div>
@@ -392,17 +392,17 @@ const ContactForm = ({ calcContext }) => {
         
         <div className="form-group">
           <label className="swala-label" style={{ fontWeight: 600, color: 'var(--color-petroleo)', marginBottom: '8px', display: 'block' }}>Nombre completo</label>
-          <input type="text" name="nombre" className="swala-input" placeholder="Tu nombre" required />
+          <input type="text" name="nombre" className="swala-input" as={motion.input} whileFocus={{ scale: 1.01, borderColor: "var(--color-lima-dark)" }} transition={{ duration: 0.2 }} placeholder="Tu nombre" required />
         </div>
         
         <div className="form-group">
           <label className="swala-label" style={{ fontWeight: 600, color: 'var(--color-petroleo)', marginBottom: '8px', display: 'block' }}>WhatsApp</label>
-          <input type="tel" name="celular" className="swala-input" placeholder="300 000 0000" required />
+          <input type="tel" name="celular" className="swala-input" as={motion.input} whileFocus={{ scale: 1.01, borderColor: "var(--color-lima-dark)" }} transition={{ duration: 0.2 }} placeholder="300 000 0000" required />
         </div>
         
         <div className="form-group">
           <label className="swala-label" style={{ fontWeight: 600, color: 'var(--color-petroleo)', marginBottom: '8px', display: 'block' }}>¿Cuál describe mejor tu situación?</label>
-          <select className="swala-input" name="situacion" required>
+          <select className="swala-input" as={motion.input} whileFocus={{ scale: 1.01, borderColor: "var(--color-lima-dark)" }} transition={{ duration: 0.2 }} name="situacion" required>
             <option value="">Selecciona tu situación</option>
             <option value="Contrato sin capital">Tengo un contrato pero no el capital para ejecutarlo</option>
             <option value="Orden de compra sin capital">Tengo una orden de compra pero necesito capital para arrancar</option>
