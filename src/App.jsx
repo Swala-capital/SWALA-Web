@@ -330,8 +330,33 @@ const App = () => {
         </div>
       </section>
 
+      {/* ══════════════════════════════════
+          SECCIÓN EXTRA: CALCULADORA (Hueso)
+      ══════════════════════════════════ */}
+      <section id="calculadora" style={{
+        background: 'var(--color-blanco-hueso)',
+        padding: '100px 0',
+        position: 'relative',
+        overflow: 'hidden',
+      }}>
+        <div className="container">
+          <motion.div 
+            variants={fadeUp} 
+            initial="hidden" 
+            whileInView="visible" 
+            viewport={{ once: true }}
+            style={{ textAlign: 'center', marginBottom: '60px' }}
+          >
+            <h2 className="sec-heading">Calcula tu <span style={{ color: 'var(--color-lima-dark)' }}>liquidez hoy</span></h2>
+            <p style={{ color: 'var(--color-gris)', fontSize: '17px' }}>Descubre cuánto capital puedes recibir por tus facturas u órdenes de compra.</p>
+          </motion.div>
+
+          <SwalaCalculator />
+        </div>
+      </section>
+
       {/* Conector Proceso → Formulario */}
-      <SectionConnector from="var(--color-petroleo)" to="var(--color-blanco-hueso)" />
+      <SectionConnector from="var(--color-blanco-hueso)" to="var(--color-blanco-hueso)" />
 
       {/* ══════════════════════════════════
           SECCIÓN 4 — FORMULARIO (Hueso)
@@ -502,6 +527,138 @@ const App = () => {
         }
       `}</style>
     </div>
+  );
+};
+
+const SwalaCalculator = () => {
+  const [amount, setAmount] = useState(10000000);
+  const [days, setDays] = useState(30);
+
+  // Lógica Swala: 2.5% mensual + 1% comisión
+  const monthlyRate = 0.025;
+  const platformFee = 0.01;
+  
+  const financialCost = amount * monthlyRate * (days / 30);
+  const serviceFee = amount * platformFee;
+  const totalCost = financialCost + serviceFee;
+  const netAmount = amount - totalCost;
+
+  const formatter = new Intl.NumberFormat('es-CO', {
+    style: 'currency',
+    currency: 'COP',
+    maximumFractionDigits: 0,
+  });
+
+  return (
+    <motion.div 
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      style={{
+        maxWidth: '900px',
+        margin: '0 auto',
+        background: '#fff',
+        padding: '48px',
+        borderRadius: '32px',
+        boxShadow: '0 40px 100px rgba(8,69,86,0.06)',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+        gap: '60px',
+      }}
+    >
+      <div className="calc-inputs">
+        <div style={{ marginBottom: '40px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
+            <label className="swala-label">Monto de la operación</label>
+            <span style={{ fontWeight: 700, color: 'var(--color-petroleo)' }}>{formatter.format(amount)}</span>
+          </div>
+          <input 
+            type="range" 
+            min="1000000" 
+            max="200000000" 
+            step="1000000" 
+            value={amount} 
+            onChange={(e) => setAmount(Number(e.target.value))}
+            className="swala-slider"
+          />
+        </div>
+
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
+            <label className="swala-label">Plazo estimado (días)</label>
+            <span style={{ fontWeight: 700, color: 'var(--color-petroleo)' }}>{days} días</span>
+          </div>
+          <input 
+            type="range" 
+            min="15" 
+            max="120" 
+            step="15" 
+            value={days} 
+            onChange={(e) => setDays(Number(e.target.value))}
+            className="swala-slider"
+          />
+        </div>
+      </div>
+
+      <div style={{
+        background: 'var(--color-petroleo)',
+        padding: '40px',
+        borderRadius: '24px',
+        color: '#fff',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        position: 'relative',
+        overflow: 'hidden',
+      }}>
+        <Orb color="rgba(230,255,40,0.1)" size="200px" top="-20%" right="-20%" />
+        
+        <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>
+          Recibes hoy aprox.
+        </p>
+        <h3 style={{ fontSize: '38px', fontFamily: 'var(--font-display)', color: 'var(--color-lima)', marginBottom: '24px' }}>
+          {formatter.format(netAmount)}
+        </h3>
+        
+        <div style={{ paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: '8px' }}>
+            <span>Costo total del servicio</span>
+            <span style={{ color: '#fff' }}>{formatter.format(totalCost)}</span>
+          </div>
+          <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', fontStyle: 'italic' }}>
+            *Sujeto a evaluación de riesgo.
+          </p>
+        </div>
+      </div>
+
+      <style>{`
+        .swala-slider {
+          -webkit-appearance: none;
+          width: 100%;
+          height: 6px;
+          background: #E5E9EC;
+          border-radius: 5px;
+          outline: none;
+        }
+        .swala-slider::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 24px;
+          height: 24px;
+          background: var(--color-lima-dark);
+          border: 4px solid #fff;
+          box-shadow: 0 4px 12px rgba(8,69,86,0.15);
+          border-radius: 50%;
+          cursor: pointer;
+          transition: 0.2s;
+        }
+        .swala-slider::-webkit-slider-thumb:hover {
+          transform: scale(1.1);
+          background: var(--color-petroleo);
+        }
+      `}</style>
+    </motion.div>
   );
 };
 
